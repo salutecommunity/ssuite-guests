@@ -115,3 +115,4 @@ details summary{cursor:pointer;text-decoration:underline}details p{white-space:p
 .tally{margin-bottom:8px}
 @media(max-width:760px){.ppl.cols{columns:1}.topnav{flex-wrap:nowrap}}
 @media(max-width:760px){.topnav{flex-wrap:wrap;overflow:visible;gap:0 18px}button.nav{white-space:nowrap;padding:12px 0}#logout{margin-left:0}}
+.tally{grid-template-columns:1.3fr auto 1fr auto 1fr auto 1fr}@media(max-width:760px){.tally{grid-template-columns:1fr}}
