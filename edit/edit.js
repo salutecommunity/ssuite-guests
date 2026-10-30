@@ -35,7 +35,8 @@
     const ul = h('ul', { cls: 'ed-list' });
     for (const t of open) {
       const n = t.free_ent == null ? t.empty.length : Math.min(t.empty.length, t.free_ent);
-      const li = h('li', {}, h('div', {}, h('strong', {}, t.name), h('small', {}, (t.host && t.host !== t.name ? 'Host: ' + t.host + ' · ' : '') + n + ' open seat' + (n === 1 ? '' : 's') + ' of ' + t.cap)),
+      const dt = D.tables.find((x) => x.name === t.name || (t.host && x.host === t.host)); const extra = dt && dt.filled > t.cap - t.empty.length ? ' · the dashboard also counts ' + (dt.filled - (t.cap - t.empty.length)) + ' invited guest(s) here not yet in a seat' : '';
+      const li = h('li', {}, h('div', {}, h('strong', {}, t.name), h('small', {}, (t.host && t.host !== t.name ? 'Host: ' + t.host + ' · ' : '') + n + ' open seat' + (n === 1 ? '' : 's') + ' of ' + t.cap + extra)),
         h('button', { cls: 'btn', on: { click: () => { li.after(form(t)); } } }, 'Add person'));
       ul.append(li);
     }
