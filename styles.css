@@ -94,3 +94,15 @@ details summary{cursor:pointer;text-decoration:underline}details p{white-space:p
 .need li span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;min-width:52px;text-align:center}
 .need li.ok span{background:#111;color:#fff}.need li.no span{border:1px solid #111;color:#111}.need li.no{font-weight:600}
 .need li small{width:100%;padding-left:68px;color:#777;font-weight:400}
+
+/* tally + invitation bars (2026-10-30) */
+.tally{display:grid;grid-template-columns:1.2fr auto 1fr auto 1.6fr 1fr;gap:12px;align-items:stretch;margin:18px 0 8px}
+.tally>div{border:1px solid #111;padding:14px 16px}.tally>.eq{border:0;align-self:center;font-size:22px;padding:0}
+.tally span{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#555}.tally b{display:block;font-size:32px;line-height:1.1;margin:4px 0}
+.tally small{display:block;font-size:12px;color:#555;line-height:1.35}.tally .tt{background:#111;color:#fff}.tally .tt span,.tally .tt small{color:#ddd}
+.tally .op2{border-style:dashed}
+.cp2{display:grid;grid-template-columns:1fr 1.3fr;gap:32px;align-items:start}
+.bars{margin-top:10px}.bar{display:grid;grid-template-columns:minmax(120px,40%) 1fr 32px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid #eee;font-size:14px}
+.bar .bl i{display:block;font-style:normal;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#777}
+.bt{background:#f1f1f1;height:12px;display:block}.bf{display:block;height:12px;background:#111}.bar b{text-align:right}
+@media(max-width:760px){.tally{grid-template-columns:1fr}.tally>.eq{display:none}.cp2{grid-template-columns:1fr}}

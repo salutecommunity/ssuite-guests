@@ -7,7 +7,7 @@ const status=g=>g.attendance==='Confirmed'?'<span class="tag on">Confirmed</span
 const nearBtn=g=>`<button class="near ${wish.has(g.id)?'on':''}" data-near="${g.id}">${wish.has(g.id)?'✓ Sit near':'+ Sit near'}</button>`;
 function render(){document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));const g=data.guests,t=data.tables,C=data.capacity;
 const seatsTaken=t.reduce((n,x)=>n+x.allocated,0)+g.filter(x=>!t.some(tb=>tb.seatGuestIds.includes(x.id))).length;const conf=g.filter(x=>x.attendance==='Confirmed').length;const pct=Math.round(seatsTaken/C*100);
-if(view==='room'){const F=window._f||'all';const conf=g.filter(x=>x.attendance==='Confirmed').length,pend=g.length-conf,open=t.filter(x=>!x.committed).reduce((a,x)=>a+x.seatGuestIds.filter(z=>!z).length,0);
+if(view==='room'){const F=window._f||'all';const conf=g.filter(x=>x.attendance==='Confirmed').length,pend=g.length-conf,live=t.filter(x=>!x.committed),invd=live.reduce((a,x)=>a+(x.invited||0),0),held=t.filter(x=>x.committed).reduce((a,x)=>a+x.capacity,0),open=live.reduce((a,x)=>a+Math.max(0,x.seatGuestIds.filter(z=>!z).length-(x.invited||0)),0),cmt=pend+invd+held,tot=conf+cmt;
 const line=x=>[x.title,x.organization].filter(Boolean).join(' · ');
 const P=(x,sub)=>{const pd=x.attendance!=='Confirmed';if(F==='pending'&&!pd&&!sub)return'';return `<li class="${sub?'sub ':''}${pd?'pd':''}${wish.has(x.id)?' on':''}" data-near="${x.id}" data-q="${esc((x.name+' '+line(x)).toLowerCase())}"><span class="nm">${esc(x.name)}${pd?' <em>pending</em>':''}</span><span class="co">${esc(line(x))||'&nbsp;'}</span><span class="st">${wish.has(x.id)?'★':'☆'}</span></li>`};
 const kids=p=>g.filter(y=>y.note==='Guest of '+p.name);const fam=p=>P(p)+kids(p).map(k=>P(k,1)).join('');
@@ -23,7 +23,7 @@ const indHtml=`<div class="room"><div class="tc wide"><ul class="cols">${rest.ma
 const chip=(k,l)=>`<button class="chip${F===k?' act':''}" data-f="${k}">${l}</button>`;
 const hn=x=>x.host.replace(/ \(.*\)$/,'');const tid=x=>'t-'+hn(x).replace(/[^A-Za-z]/g,'');const ni=(h,l,n)=>`<a href="#${h}">${l}<span>${n}</span></a>`;const sub=L=>L.map(x=>`<a class="s2" href="#${tid(x)}">${esc(hn(x))}</a>`).join('');const HT=t.filter(x=>x.honoree),TT=t.filter(x=>!x.honoree);
 const side=`<aside class="side"><p class="sh">Jump to</p>${ni('s-hon','Honorees',hon.length+HT.length)}${sub(HT)}${ni('s-tab','Tables',TT.length)}${sub(TT)}${ni('s-ind','Individual tickets',rest.length)}<p class="sh">Show</p>${chip('all','Everyone')}${chip('pending','Pending only')}</aside>`;
-$('content').innerHTML=`<div class="layout">${side}<div class="mainc"><h1>The room</h1><p class="lead"><b>${conf}</b> confirmed &nbsp;·&nbsp; <b>${pend}</b> pending &nbsp;·&nbsp; <b>${open}</b> open seats at tables</p><p class="how">Hosts are listed first, with their guests indented beneath. <em class="k">pending</em> = invited, not yet registered. Tap a name to ☆ star someone (visible only to you).</p>
+$('content').innerHTML=`<div class="layout">${side}<div class="mainc"><h1>The room</h1><div class="tally"><div class="tt"><span>Total attending</span><b>${tot}</b><small>people committed to attend</small></div><div class="eq">=</div><div><span>Confirmed</span><b>${conf}</b><small>registered · name &amp; details in</small></div><div class="eq">+</div><div><span>Committed</span><b>${cmt}</b><small>${pend} named, not yet registered · ${invd} invited · ${held} seats held at committed tables</small></div><div class="op2"><span>Open seats</span><b>${open}</b><small>still available at tables</small></div></div><p class="how">Hosts are listed first, with their guests indented beneath. <em class="k">pending</em> = invited, not yet registered. Tap a name to ☆ star someone (visible only to you).</p>
 <div class="tools"><input id="search" class="srch" placeholder="Search name, title or company"></div>
 ${sec('hon','Honorees','Honorees, their guests and honoree-hosted tables',honHtml)}${sec('tab','Tables','Partner and host tables',tabHtml)}${sec('ind','Individual tickets','Guests with their own tickets · plus-ones indented beneath',indHtml)}`+foot()+'</div></div>';
 document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{window._f=b.dataset.f;render()});
@@ -40,13 +40,13 @@ function table(rows,compact){return `<div class="tablewrap"><table><thead><tr><t
 load().catch(()=>{$('error').textContent='Dashboard unavailable'});
 function leadView(){const L=data.leadership,V=L.live,C=data.capacity;
 const fd=s=>s?new Date(s+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
-const badge=b=>`<span class="badge b-${b.replace(/ /g,'').toLowerCase()}">${b}</span>`;const tc=' <span class="tag">to confirm</span>';
+const badge=b=>`<span class="badge b-${b.replace(/ /g,'').toLowerCase()}">${b}</span>`;const tc='';
 const ck=(ok,l)=>`<li class="${ok?'ok':''}">${ok?'✓':'○'} ${l}</li>`;
 // ---- honorees
 const STEPS=['Response','Profile','Evening','Additional guests','Support SALUTE','Review'];
 const H=V.honorees.filter(h=>!h.closed&&h.db!=='declined'&&!(L.hiddenHonorees||[]).includes(h.name)).map(h=>{const o=L.honoreeOverride[h.name]||{};const st=o.st||({accepted:'Accepted',declined:'Declined',invited:'Invited'}[h.db]||h.db);
  const b=st==='Declined'?'Closed':h.submitted?'Complete':(h.opened&&(h.done.length||h.saved||h.db==='accepted'))?'In progress':'Not started';return Object.assign({},h,{st,b,note:o.note||'',confirm:o.confirm})});
-(L.manualHonorees||[]).forEach(m=>H.push(Object.assign({b:'Not started',done:[],invitees:[],codeGuests:[],det:{},manual:1},m)));
+(L.manualHonorees||[]).filter(m=>!H.some(h=>(h.name||'').toLowerCase()===m.name.toLowerCase())).forEach(m=>H.push(Object.assign({b:'Not started',done:[],invitees:[],codeGuests:[],det:{},manual:1},m)));
 L.openCategories.forEach(c=>H.push({name:'—',honor:c.cat,st:'Open',b:'Not started',note:c.note,done:[],invitees:[],codeGuests:[],open:1}));
 const ci=c=>{const i=L.categoryOrder.indexOf(c);return i<0?99:i};const so={'Accepted':0,'Verbal yes':1,'In conversation':2,'Invited':2,'Open':3,'Declined':4};H.sort((a,b)=>ci(a.honor)-ci(b.honor)||so[a.st]-so[b.st]);
 const fu=h=>{if(h.open)return[];const d=h.det||{},o=[];if(h.manual)return['Create portal once she accepts'];
@@ -99,8 +99,8 @@ const tcard=t=>{const r=cnt(t,'registered'),i=cnt(t,'invited')+cnt(t,'pending');
 const byHost=h=>V.tables.find(t=>t.host===h);
 const S=L.sponsors.map(s=>{const t=s.host?byHost(s.host):null;const p=t&&t.portal;const any=p&&(p.logo||p.bio||p.website||p.linkedin);
  return Object.assign({},s,{t,p,b:p&&p.submitted?'Complete':any?'In progress':'Not started',filled:t?t.seats.filter(x=>x.st!=='open').length:0,cap:t?t.cap:s.seats})});
-const srow=s=>`<div class="pc"><div class="pch"><div><p class="cat">${esc(s.level)}${s.confirm?tc:''}</p><b>${esc(s.name)}</b></div>${badge(s.b)}</div>
- <p class="pst"><span class="tag${s.status==='Paid'?' on':''}">${esc(s.status)}</span> &nbsp;<span class="pm">${s.cap==null?'Seats to confirm':s.filled+' of '+s.cap+' seats named'}</span></p>
+const srow=s=>`<div class="pc"><div class="pch"><div><p class="cat">${esc(/to confirm/i.test(s.level||'')?'':s.level)}</p><b>${esc(s.name)}</b></div>${badge(s.b)}</div>
+ <p class="pst"><span class="tag${s.status==='Paid'?' on':''}">${esc(s.status)}</span> &nbsp;<span class="pm">${s.cap==null?'':s.filled+' of '+s.cap+' seats named'}</span></p>
  ${s.p?`<p class="pm">Partner portal${s.p.submitted?' · submitted '+fd(s.p.submitted):' · not yet submitted'}</p><ul class="steps">${ck(!!s.p.recognition,'Recognition: '+(s.p.recognition||'—'))}${ck(s.p.name,'Name / company')}${ck(s.p.logo,'Logo')}${ck(s.p.bio,'Company bio')}${ck(s.p.website,'Website')}${ck(s.p.linkedin,'LinkedIn')}${ck(!!s.p.submitted,'Submitted')}</ul>`:`<p class="pm">${s.t?'No partner portal record yet':'No table in ticketing yet · no partner portal'}</p>`}</div>`;
 const comm=V.community.filter(c=>L.communityNames[c.org]);
 // ---- summary
@@ -111,5 +111,5 @@ const nav=`<nav class="jump"><a href="#p-hon">Honorees</a><a href="#p-sp">Sponso
 return `<h1>Progress</h1><p class="lead">Leadership View · status only · the full guest list is under “The room.”</p>${sum}${nav}
 <section class="sec" id="p-hon"><h2>Honoree portals</h2><p class="ss">One row per honoree · badge reflects their private portal</p><div class="grid">${H.map(hrow).join('')}</div>${closed.length?`<p class="pm">Closed invitations (no longer honorees): ${esc(closed.join(', '))}</p>`:''}</section>
 <section class="sec" id="p-sp"><h2>Sponsor &amp; partner portals</h2><p class="ss">Level, status and partner-portal progress</p><div class="grid">${S.map(srow).join('')}</div>
-<h2 style="margin-top:30px">Community partners</h2><p class="ss">Partner-page seats used, of 9 held</p><ul class="cl">${comm.map(c=>`<li><span>${esc(c.org)}</span><b>${c.used} of ${c.max}</b></li>`).join('')}</ul></section>
+<h2 style="margin-top:30px">Community partners</h2><p class="ss">Partner-page seats used, of 9 held</p><div class="cp2"><div><ul class="cl">${comm.map(c=>`<li><span>${esc(c.org)}</span><b>${c.used} of ${c.max}</b></li>`).join('')}</ul></div>${(()=>{const P=(V.pages||[]).filter(x=>x.n>0).sort((a,b)=>b.n-a.n),M=Math.max(1,...P.map(x=>x.n)),z=(V.pages||[]).filter(x=>!x.n).length;return `<div><h2 style="margin-top:30px">Invitation pages</h2><p class="ss">People brought in by each personal and partner invitation page · paid/registered seats</p><div class="bars">${P.map(x=>`<div class="bar"><span class="bl">${esc(x.label)}<i>${x.kind==='partner'?'Partner':'Personal'}</i></span><span class="bt"><span class="bf" style="width:${Math.round(x.n/M*100)}%"></span></span><b>${x.n}</b></div>`).join('')||'<p class="pm">No sign-ups through invitation pages yet</p>'}</div>${z?`<p class="pm">${z} other invitation ${z===1?'page has':'pages have'} no sign-ups yet</p>`:''}</div>`})()}</div></section>
 <section class="sec" id="p-tab"><h2>Tables</h2><p class="ss">Every seat · registered, invited (pending) or open</p><div class="grid">${T.map(tcard).join('')}</div></section>`}
