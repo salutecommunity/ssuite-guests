@@ -119,3 +119,4 @@ details summary{cursor:pointer;text-decoration:underline}details p{white-space:p
 
 .ppl li small.via{display:block;flex-basis:100%;color:var(--accent,#8a5a2b);font-style:italic}
 @media(max-width:600px){#iv{width:100%}}
+.ppl li small.em{display:block;flex-basis:100%}a.em{color:inherit;text-decoration:underline;word-break:break-all}
