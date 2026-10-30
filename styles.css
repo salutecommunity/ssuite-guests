@@ -114,3 +114,4 @@ details summary{cursor:pointer;text-decoration:underline}details p{white-space:p
 .ppl.cols{columns:2;column-gap:40px}.ppl.cols li{break-inside:avoid}.tcard[hidden]{display:none}#tsel{border:1px solid #111;padding:6px 8px;background:#fff;font:inherit;font-size:13px}
 .tally{margin-bottom:8px}
 @media(max-width:760px){.ppl.cols{columns:1}.topnav{flex-wrap:nowrap}}
+@media(max-width:760px){.topnav{flex-wrap:wrap;overflow:visible;gap:0 18px}button.nav{white-space:nowrap;padding:12px 0}#logout{margin-left:0}}
