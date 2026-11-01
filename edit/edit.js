@@ -7,7 +7,7 @@
     const t = sessionStorage.getItem(K);
     const r = await fetch(B + '/' + path, { method: body ? 'POST' : 'GET', headers: Object.assign({ 'Content-Type': 'application/json' }, t ? { Authorization: 'Bearer ' + t } : {}), body: body ? JSON.stringify(body) : undefined, cache: 'no-store', credentials: 'omit' });
     const j = await r.json().catch(() => ({}));
-    if (r.status === 401 && t && path !== 'verify') { sessionStorage.removeItem(K); location.reload(); }
+    if (r.status === 401 && t && path !== 'verify' && path !== 'passcode') { sessionStorage.removeItem(K); location.reload(); }
     if (!r.ok) throw new Error(j.error || 'Something went wrong');
     return j;
   }
@@ -17,6 +17,8 @@
     try { await api('request-code', { email }); $('#emailForm').hidden = true; $('#codeForm').hidden = false; $('#sentTo').textContent = 'If ' + email + ' is a named editor, a code is on its way (subject: "Your S.Suite Admin sign-in code"). It works for 10 minutes.'; $('#code').focus(); } catch (x) { $('#error').textContent = x.message; } });
   $('#codeForm').addEventListener('submit', async (e) => { e.preventDefault(); $('#error').textContent = '';
     try { const r = await api('verify', { email, code: $('#code').value.trim() }); sessionStorage.setItem(K, r.token); start(); } catch (x) { $('#error').textContent = x.message; } });
+  $('#leadForm').addEventListener('submit', async (e) => { e.preventDefault(); $('#error').textContent = '';
+    try { const r = await api('passcode', { name: $('#lname').value.trim(), passcode: $('#lpass').value }); $('#lpass').value = ''; sessionStorage.setItem(K, r.token); start(); } catch (x) { $('#error').textContent = x.message; } });
   $('#again').addEventListener('click', (e) => { e.preventDefault(); $('#codeForm').hidden = true; $('#emailForm').hidden = false; });
 
   // ---------- app ----------
