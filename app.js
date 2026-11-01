@@ -2,7 +2,7 @@
 let data=null,tab='overview';const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const F={q:'',st:'all',t:'all',iq:'',iv:'all'};
 async function load(){const r=await fetch('/api/snapshot',{cache:'no-store'});if(!r.ok){data=null;$('login').hidden=false;$('dashboard').hidden=true;return}data=await r.json();$('passcode').value='';$('login').hidden=true;$('dashboard').hidden=false;
- document.querySelector('header .private').textContent=data.leadership?'LEADERSHIP VIEW · READ ONLY':'BOARD & SLC · READ ONLY';if(tab==='honorees'&&!data.leadership)tab='overview';render()}
+ {const pv=document.querySelector('header .private');pv.textContent=data.leadership?'LEADERSHIP VIEW':'BOARD & SLC · READ ONLY';if(data.leadership){const a=document.createElement('a');a.href='/edit/';a.textContent='  ·  Edit mode →';a.style.color='inherit';pv.append(a)}}if(tab==='honorees'&&!data.leadership)tab='overview';render()}
 $('loginForm').onsubmit=async e=>{e.preventDefault();const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({passcode:$('passcode').value})});$('error').textContent=r.ok?'':(await r.json()).error;if(r.ok)await load()};
 const TABS=()=>[['overview','Overview'],['tables','Tables'],['individuals','Individual tickets'],['partners','Partners & invite pages']].concat(data.leadership?[['honorees','Honorees']]:[]);
 const go=t=>{tab=t;render();scrollTo(0,0)};
