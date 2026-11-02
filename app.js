@@ -1,10 +1,10 @@
 // S.SUITE guest dashboard — one shared layout for Board/SLC and Leadership. Data comes from the server; this file holds none.
 let data=null,tab='overview';const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const F={q:'',st:'all',t:'all',iq:'',iv:'all'};
+const F={q:'',st:'all',t:'all',iq:'',iv:'all',gi:'all',gg:'all',gt:'all',gq:''};
 async function load(){const r=await fetch('/api/snapshot',{cache:'no-store'});if(!r.ok){data=null;$('login').hidden=false;$('dashboard').hidden=true;return}data=await r.json();$('passcode').value='';$('login').hidden=true;$('dashboard').hidden=false;
- {const pv=document.querySelector('header .private');pv.textContent=data.leadership?'LEADERSHIP VIEW':'BOARD & SLC · READ ONLY';if(data.leadership){const a=document.createElement('a');a.href='/edit/';a.textContent='  ·  Edit mode →';a.style.color='inherit';pv.append(a)}}if(tab==='honorees'&&!data.leadership)tab='overview';render()}
+ {const pv=document.querySelector('header .private');pv.textContent=data.leadership?'LEADERSHIP VIEW':'BOARD & SLC · READ ONLY';if(data.leadership){const a=document.createElement('a');a.href='/edit/';a.textContent='  ·  Edit mode →';a.style.color='inherit';pv.append(a)}}if(tab==='honorees'&&!data.leadership)tab='overview';if(tab==='guestlist'&&!data.guestList)tab='overview';render()}
 $('loginForm').onsubmit=async e=>{e.preventDefault();const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({passcode:$('passcode').value})});$('error').textContent=r.ok?'':(await r.json()).error;if(r.ok)await load()};
-const TABS=()=>[['overview','Overview'],['tables','Tables'],['individuals','Individual tickets'],['partners','Partners & invite pages']].concat(data.leadership?[['honorees','Honorees']]:[]);
+const TABS=()=>[['overview','Overview']].concat(data.guestList?[['guestlist','Guest list']]:[]).concat([['tables','Tables'],['individuals','Individual tickets'],['partners','Partners & invite pages']]).concat(data.leadership?[['honorees','Honorees']]:[]);
 const go=t=>{tab=t;render();scrollTo(0,0)};
 const pill=s=>s==='Confirmed'?'<span class="tag on">Confirmed</span>':'<span class="tag">Invited</span>';
 const fd=s=>s?new Date(s+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
@@ -13,15 +13,38 @@ function render(){
  $('tabs').innerHTML=TABS().map(([k,l])=>`<button class="nav${tab===k?' active':''}" data-tab="${k}">${l}</button>`).join('')+'<button class="nav" id="logout">Sign out</button>';
  document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>go(b.dataset.tab));
  $('logout').onclick=async()=>{tab='overview';await fetch('/api/logout',{method:'POST'});data=null;$('content').replaceChildren();await load()};
- const V={overview,tables,individuals,partners,honorees}[tab]||overview;$('content').innerHTML=V()+`<p class="footer">Updated ${esc(data.asOf)} · <button id="refresh">Refresh</button></p>`;
+ const V={overview,guestlist,tables,individuals,partners,honorees}[tab]||overview;$('content').innerHTML=V()+`<p class="footer">Updated ${esc(data.asOf)} · <button id="refresh">Refresh</button></p>`;
  if($('refresh'))$('refresh').onclick=()=>load();
  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=e=>{e.preventDefault();go(b.dataset.go)});
- if(tab==='tables')bindTables();if(tab==='individuals')bindInd();if(tab==='honorees')bindHon();
+ if(tab==='guestlist')bindGL();if(tab==='tables')bindTables();if(tab==='individuals')bindInd();if(tab==='honorees')bindHon();
 }
 function tally(){const S=data.summary;return `<div class="tally"><div class="tt"><span>Total seats committed</span><b>${S.total}</b><small>every individual ticket plus every seat at every table, including honoree tables</small></div><div class="eq">=</div><div><span>Registered</span><b>${S.registered}</b><small>name and details are in</small></div><div class="eq">+</div><div><span>Named or invited, not yet registered</span><b>${S.pending}</b><small>we know who is coming; they still need to register</small></div><div class="eq">+</div><div><span>Table seats not yet assigned</span><b>${S.unassigned}</b><small>seats paid for or held; the host has not named a guest yet</small></div></div>`}
 function overview(){const S=data.summary,P=data.pages.filter(p=>p.n>0);const card=(k,t,v,s)=>`<a href="#" class="kpi ocard" data-go="${k}"><span>${t}</span><b>${v}</b><small>${s}</small><em>Open →</em></a>`;
  let h='';if(data.leadership){const H=honList();h=card('honorees','Honorees',H.filter(x=>!x.open).length,`${H.filter(x=>x.b==='Complete').length} portals complete · ${H.filter(x=>x.b==='In progress').length} in progress`)}
- return `<h1>Overview</h1>${tally()}<div class="kpis ocards">${card('tables','Tables',S.tables,`${S.tableSeats} seats · ${S.unassigned} not yet assigned`)}${card('individuals','Individual tickets',S.individuals,'people on their own ticket, plus their guests')}${card('partners','Partners & invite pages',P.reduce((n,p)=>n+p.n,0),'people brought in through invite pages'+(P[0]?` · top: ${esc(P[0].label)} (${P[0].n})`:''))}${h}</div>`}
+ const GL=data.guestList;return `<h1>Overview</h1>${tally()}<div class="kpis ocards">${GL?card('guestlist','Guest list',GL.total,`confirmed · ${GL.atTables} at tables · ${GL.individuals} individual · ${GL.board} Board/SLC`):''}${card('tables','Tables',S.tables,`${S.tableSeats} seats · ${S.unassigned} not yet assigned`)}${card('individuals','Individual tickets',S.individuals,'people on their own ticket, plus their guests')}${card('partners','Partners & invite pages',P.reduce((n,p)=>n+p.n,0),'people brought in through invite pages'+(P[0]?` · top: ${esc(P[0].label)} (${P[0].n})`:''))}${h}</div>`}
+// ---------- Guest list (2026-11-01): confirmed people only, grouped by table, then individuals, then Board/SLC ----------
+const GT={all:'Everyone',table:'Table guests',individual:'Individual guests',board:'Board & SLC'};
+function guestlist(){const G=data.guestList,inds=G.industries.filter(i=>i.n>0),groups=G.groups;
+ const opt=(v,l,cur)=>`<option value="${esc(v)}"${cur===v?' selected':''}>${esc(l)}</option>`;
+ if(F.gi!=='all'&&!inds.some(i=>i.name===F.gi))F.gi='all';if(F.gg!=='all'&&!groups.some(g=>g.key===F.gg))F.gg='all';
+ const row=(p,g)=>{const tags=[p.host?'host':'',p.guestOf?'guest of '+p.guestOf:'',p.board&&g.kind!=='board'?p.board:''].filter(Boolean);
+  return `<tr data-i="${esc(p.industry)}" data-t="${esc(p.type+(p.board?' board':''))}" data-q="${esc([p.name,p.title,p.org,p.industry,p.guestOf||'',p.board||'',g.name].join(' ').toLowerCase())}"><td class="n"><b>${esc(p.name)}</b>${tags.map(t=>`<em class="hs">${esc(t)}</em>`).join('')}${g.kind==='board'&&p.board?`<small class="bs">${esc(p.board)}</small>`:''}</td><td class="ti">${esc(p.title)}</td><td class="co">${esc(p.org)}</td><td class="ind">${esc(p.industry)}</td></tr>`};
+ const grp=g=>`<section class="glg" data-g="${esc(g.key)}" data-k="${g.kind}"><div class="glh"><div><h2>${esc(g.name)}</h2>${g.sub?`<p class="pm">${esc(g.sub)}</p>`:''}</div><p class="glm">${g.size?esc(g.size)+' · ':''}${g.confirmed} confirmed${g.awaiting?` · ${g.awaiting} invited, awaiting registration`:''}</p></div>${g.note?`<p class="pm">${esc(g.note)}</p>`:''}
+ ${g.people.length?`<table class="gtab"><thead><tr><th>Name</th><th>Title</th><th>Company</th><th>Industry</th></tr></thead><tbody>${g.people.map(p=>row(p,g)).join('')}</tbody></table>`:`<p class="glempty">${g.held?'Names to come':'No confirmed guests yet'}</p>`}</section>`;
+ return `<h1>Guest list</h1><p class="lead">${G.total} confirmed guests · ${G.atTables} at tables · ${G.individuals} individual guests · ${G.board} Board/SLC seats.</p><p class="pm">Only people who have registered are listed. ${G.awaiting} table invitations are still awaiting registration (counted on each table, not named).</p>
+ <div class="tools gl-tools no-print"><label class="fl pri">Industry<select id="gi">${opt('all','All industries ('+G.total+')',F.gi)}${inds.map(i=>opt(i.name,i.name+' ('+i.n+')',F.gi)).join('')}</select></label>
+ <label class="fl">Table / group<select id="gg">${opt('all','All tables & groups',F.gg)}${groups.map(g=>opt(g.key,g.name+' ('+g.confirmed+')',F.gg)).join('')}</select></label>
+ <label class="fl">Guest type<select id="gt">${Object.entries(GT).map(([k,l])=>opt(k,l,F.gt)).join('')}</select></label>
+ <input id="gq" class="srch" type="search" placeholder="Search name, title or company" value="${esc(F.gq)}"><button class="chip" id="gprint" type="button">Print</button><button class="chip" id="gclear" type="button">Clear filters</button></div>
+ <p class="glc" id="gcount" aria-live="polite"></p><p class="print-only" id="gpf"></p>
+ <div id="glist">${groups.map(grp).join('')}</div><p class="glempty" id="gnone" hidden>No one matches these filters.</p>`}
+function bindGL(){const G=data.guestList;const ap=()=>{const q=F.gq.toLowerCase().trim(),act=q||F.gi!=='all'||F.gt!=='all';let n=0,gs=0;
+ document.querySelectorAll('.glg').forEach(s=>{let v=0;s.querySelectorAll('tbody tr').forEach(tr=>{const ok=(F.gi==='all'||tr.dataset.i===F.gi)&&(F.gt==='all'||tr.dataset.t.split(' ').includes(F.gt))&&(!q||tr.dataset.q.includes(q));tr.hidden=!ok;if(ok)v++});
+  const show=(F.gg==='all'||s.dataset.g===F.gg)&&(act?v>0:true)&&!(F.gt!=='all'&&F.gt!=='table'&&s.dataset.k==='table'&&!v);s.hidden=!show;if(show){n+=v;if(v)gs++}});
+ const f=[F.gi!=='all'?F.gi:'',F.gg!=='all'?(G.groups.find(g=>g.key===F.gg)||{}).name:'',F.gt!=='all'?GT[F.gt]:'',q?'“'+F.gq.trim()+'”':''].filter(Boolean);
+ $('gcount').textContent=`Showing ${n} of ${G.total} confirmed guests`+(f.length?' · '+f.join(' · '):'');$('gpf').textContent=`S.SUITE confirmed guest list · ${f.length?f.join(' · '):'everyone'} · ${n} people · updated ${data.asOf}`;$('gnone').hidden=n>0};
+ $('gi').onchange=()=>{F.gi=$('gi').value;ap()};$('gg').onchange=()=>{F.gg=$('gg').value;ap()};$('gt').onchange=()=>{F.gt=$('gt').value;ap()};$('gq').oninput=()=>{F.gq=$('gq').value;ap()};
+ $('gprint').onclick=()=>window.print();$('gclear').onclick=()=>{F.gi=F.gg=F.gt='all';F.gq='';render()};ap()}
 const ml=e=>e?`<a class="em" href="mailto:${esc(e)}">${esc(e)}</a>`:'';
 function tables(){const T=data.tables;return `<h1>Tables</h1><p class="lead">${data.summary.tables} tables · each card shows the host first, guests beneath.</p>
  <div class="tools"><input id="tq" class="srch" placeholder="Search name, title or company" value="${esc(F.q)}">${[['all','Everyone'],['Confirmed','Confirmed'],['Invited','Invited']].map(([k,l])=>`<button class="chip${F.st===k?' act':''}" data-st="${k}">${l}</button>`).join('')}<select id="tsel"><option value="all">All tables</option>${T.map((t,i)=>`<option value="${i}"${F.t==String(i)?' selected':''}>${esc(t.name)}</option>`).join('')}</select></div>
