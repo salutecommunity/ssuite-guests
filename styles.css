@@ -138,3 +138,11 @@ details summary{cursor:pointer;text-decoration:underline}details p{white-space:p
 @media print{header .private,.topnav,.no-print,.footer,footer,#gnone{display:none!important}main{margin:0;max-width:none;padding:0}header{padding:0 0 8px;border:0}header img{height:22px}
  body{font-size:11px}h1{font-size:26px;margin-bottom:4px}.lead{font-size:12px;margin:2px 0}.print-only{display:block;font-size:11px;color:#333}.glc{display:none}
  .glg{margin-top:12px}.glh h2{font-size:15px}.gtab{font-size:10.5px}.gtab th,.gtab td{padding:3px 8px 3px 0}.gtab thead{display:table-header-group}.gtab tr{break-inside:avoid}.glh{break-after:avoid}}
+/* 2026-11-02 Seating chart */
+.st-draft{display:inline-block;vertical-align:middle;font:500 12px var(--sans);letter-spacing:.2em;text-transform:uppercase;border:2px solid var(--ink);padding:4px 10px;margin-left:10px;background:repeating-linear-gradient(45deg,#fff,#fff 6px,#eee 6px,#eee 12px)}
+.st-g{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}.st-l{list-style:none;margin:10px 0 0;padding:0;font-size:13px}
+.st-s{display:grid;grid-template-columns:22px 1fr;column-gap:4px;padding:5px 0;border-top:1px solid #eee}.st-s .sn{color:#999;font-size:11px;padding-top:2px;grid-row:span 2}.st-s small{grid-column:2;color:#777;font-size:11px}
+.st-s .st-n b{font-weight:500}.st-s .st-n em{font-style:normal;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-left:6px}
+.st-s.k-open .st-n{color:#aaa;font-style:italic}.st-s.k-held .st-n b,.st-s.k-reserved .st-n b{font-weight:400;color:#666}
+.st-s[hidden],.st-r[hidden]{display:none}.st-un{margin-top:36px}.st-r .pch b{font:400 20px/1.2 var(--serif)}
+@media print{.st-g{display:grid;grid-template-columns:1fr 1fr;gap:8px}.st-r{break-inside:avoid;padding:8px;border:1px solid #999}.st-l{font-size:9.5px;margin-top:4px}.st-s{padding:1px 0}.st-r .pch b{font-size:13px}.st-r .pm{font-size:9px;margin:0}.st-draft{font-size:10px;padding:2px 6px}}
