@@ -28,7 +28,7 @@
   function nav() { const t = $('#tabs'); t.replaceChildren(
     ...[['fill', 'Fill a host’s seat'], ['seat', 'Seating plan (rounds of 10)']].map(([k, l]) => h('button', { cls: 'nav' + (tab === k ? ' active' : ''), on: { click: () => { tab = k; sel = null; msg = ''; render(); } } }, l)),
     h('button', { cls: 'nav', id: 'logout', on: { click: () => { sessionStorage.removeItem(K); location.reload(); } } }, 'Sign out')); }
-  function render() { nav(); const c = $('#content'); c.replaceChildren(); if (msg) c.append(h('p', { cls: 'ed-msg' }, msg)); (tab === 'fill' ? fillView : seatView)(c); }
+  function render() { nav(); const c = $('#content'); c.replaceChildren(); if(D.guestCounts){const C=D.guestCounts;c.append(h('section',{cls:'ed-msg'},h('h2',{},'Guest headcount'),h('p',{},C.namedGuests+' named guests · '+C.detailsComplete+' registration complete · '+C.detailsPending+' registration pending'),h('p',{},C.invitationPlaceholders+' invitation placeholders · '+C.emptyTableSeats+' empty table seats (not included in named guests). Same live count across admin dashboards; manual seating drafts are separate.')));} if (msg) c.append(h('p', { cls: 'ed-msg' }, msg)); (tab === 'fill' ? fillView : seatView)(c); }
 
   // ---------- fill a seat ----------
   function fillView(c) {
