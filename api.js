@@ -7,4 +7,5 @@ window.fetch=async(u,o={})=>{if(typeof u!=='string'||!u.startsWith('/api/'))retu
  if(u==='/api/logout'){sessionStorage.removeItem(K);return R(200,{})}
  if(u==='/api/snapshot'){const t=sessionStorage.getItem(K);if(!t)return R(401,{error:'Sign in required'});
   const r=await f(B+'/snapshot',{headers:{Authorization:'Bearer '+t},cache:'no-store',credentials:'omit'});if(r.status===401)sessionStorage.removeItem(K);return R(r.status,await r.json().catch(()=>({})))}
+ if(u.startsWith('/api/honoree?')){const t=sessionStorage.getItem(K);if(!t)return R(401,{error:'Sign in required'});try{const r=await f(B+u.slice(4),{headers:{Authorization:'Bearer '+t},cache:'no-store',credentials:'omit'});if(r.status===401)sessionStorage.removeItem(K);return R(r.status,await r.json().catch(()=>({error:'Record unavailable'})))}catch(e){return R(503,{error:'Could not load the record. Please try again.'})}}
  if(u==='/api/wishes')return R(404,{});return R(404,{})}})();

@@ -198,6 +198,58 @@ const hrow=h=>{const g=[];if(h.plusOne)g.push(`<li class="ok">${esc(h.plusOne.na
 window.__H=H;window.__REC=rec;
  const k=b=>H.filter(x=>!x.open&&x.b===b).length;
  return `<h1>Honorees</h1><p class="lead">${k('Complete')} complete · ${k('In progress')} in progress · ${k('Not started')} not started · ${H.filter(x=>x.open).length} category open. Tap a card for the full record.</p><div class="grid">${H.map(hrow).join('')}</div><div id="drawer" class="drawer" hidden><div class="dr-bg"></div><aside class="dr-p" role="dialog" aria-modal="true"></aside></div>`}
-function bindHon(){const open=n=>{const h=window.__H.find(x=>x.name===n);if(!h)return;const D=$('drawer');D.querySelector('.dr-p').innerHTML=window.__REC(h);D.hidden=false;document.body.style.overflow='hidden';const c=()=>{D.hidden=true;document.body.style.overflow=''};D.querySelector('.dr-x').onclick=c;D.querySelector('.dr-bg').onclick=c;document.onkeydown=e=>{if(e.key==='Escape')c()}};
- document.querySelectorAll('[data-hon]').forEach(el=>{el.onclick=e=>{if(e.target.closest('details'))return;open(el.dataset.hon)};el.onkeydown=e=>{if(e.key==='Enter')open(el.dataset.hon)}})}
+// Full Leadership record. All values are escaped; private files use short-lived links.
+const HON_LABELS={response:'Response',attend:'Attending in person',pubName:'Program name',pubTitle:'Program title',pubOrg:'Program organization',pron:'Name pronunciation',bio:'Biography',hsEmail:'Headshot will be emailed',tFirst:'First name',tLast:'Last name',tEmail:'Email',tPhone:'Phone',tTitle:'Title',tOrg:'Organization',tMeal:'Meal selection',diet:'Dietary needs / allergies',dietNote:'Dietary / allergy details',access:'Accessibility needs',guest:'Bringing a complimentary guest',gFirst:'Guest first name',gLast:'Guest last name',gName:'Guest full name',gEmail:'Guest email',gTitle:'Guest title',gOrg:'Guest organization',gMeal:'Guest meal selection',gAccess:'Guest dietary / accessibility needs',gMode:'Guest follow-up preference',handoff:'Follow-up handoff',hoName:'Follow-up contact name',hoEmail:'Follow-up contact email',teamName:'Team contact name',teamEmail:'Team contact email',repAttend:'Representative attending',rFirst:'Representative first name',rLast:'Representative last name',rEmail:'Representative email',rTitle:'Representative title',rOrg:'Representative organization',videoLink:'Acceptance video download link',tableKind:'Table selection',tableStatus:'Table payment status',tableRef:'Table reference',tableLink:'Table link',inviteMode:'Additional guest follow-up',invitees:'Additional invitees',inviteList:'Additional guest notes',supportMode:'Supporter outreach preference',supporters:'Supporter contacts',supportList:'Supporter notes',shareAnnouncement:'Share announcement',social:'Social handle',annContact:'Announcement contact',annNote:'Announcement notes',draftPost:'Draft announcement',declineNote:'Decline note',done:'Completed steps',step:'Last step',travel:'Travel details',hotel:'Hotel',address:'Hotel address',check_in:'Check-in',check_out:'Check-out',request:'Travel request',requests:'Travel request history',extend:'Requested change',note:'Note',requested_at:'Requested at',on_file:'Bio and headshot on file',comp_table:'Complimentary table',virtual:'Virtual acceptance',allow_proxy:'Representative option enabled',neutral:'Gender-neutral portal',name:'Name',email:'Email',first_opened_at:'First opened',last_opened_at:'Last opened',open_count:'Portal visits',last_saved_at:'Last saved',submitted_at:'Submitted',submission_count:'Submission count',updated_at:'Last updated',response_deadline:'Response deadline'};
+const honLabel=k=>HON_LABELS[k]||k.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/_/g,' ').replace(/^./,x=>x.toUpperCase());
+function honValue(v){
+ if(v===null||v===undefined||v==='')return '<span class="pm">Not provided</span>';
+ if(typeof v==='boolean')return v?'Yes':'No';
+ if(Array.isArray(v))return v.length?'<ul>'+v.map(x=>'<li>'+honValue(x)+'</li>').join('')+'</ul>':'<span class="pm">None provided</span>';
+ if(typeof v==='object')return '<dl>'+Object.entries(v).map(([k,x])=>`<div class="rr"><dt>${esc(honLabel(k))}</dt><dd>${honValue(x)}</dd></div>`).join('')+'</dl>';
+ const s=String(v);try{const u=new URL(s);if(u.protocol==='https:'||u.protocol==='http:')return `<a href="${esc(u.href)}" target="_blank" rel="noopener noreferrer">${esc(s)}</a>`}catch{}
+ return esc(s).replace(/\n/g,'<br>');
+}
+function honDetailMarkup(d,h){
+ const r=d.response||{},seen=new Set();
+ const section=(title,keys)=>`<h3>${esc(title)}</h3><dl>${keys.map(k=>{seen.add(k);return `<div class="rr"><dt>${esc(honLabel(k))}</dt><dd>${honValue(r[k])}</dd></div>`}).join('')}</dl>`;
+ let html=`<div class="dr-h"><p class="cat">${esc(d.honor)} Honor</p><h2 id="hon-detail-title">${esc(d.name)}</h2><p class="pst">${esc(d.status)} · ${d.timestamps.submitted_at?'Submitted':'Not submitted — saved entries shown below'}</p><button class="dr-x" aria-label="Close record">×</button></div><p class="pm">Leadership only · Review and download without changing this honoree’s portal or sending email.</p><div class="hon-actions"><button id="hon-download-record">Download full record</button>${r.bio?'<button id="hon-download-bio">Download bio (TXT)</button>':''}<button id="hon-reload">Refresh details &amp; file links</button></div>`;
+ html+=section('Response & representative',['response','attend','repAttend','rFirst','rLast','rEmail','rTitle','rOrg','declineNote']);
+ html+=section('Profile & program listing',['pubName','pubTitle','pubOrg','pron','bio','hsEmail']);
+ html+=section('Honoree contact, meal & dietary needs',['tFirst','tLast','tEmail','tPhone','tTitle','tOrg','tMeal','diet','dietNote','access']);
+ html+=section('Complimentary guest',['guest','gFirst','gLast','gName','gEmail','gTitle','gOrg','gMeal','gAccess','gMode']);
+ html+=section('Follow-up contacts',['teamName','teamEmail','handoff','hoName','hoEmail']);
+ html+=section('Table & additional guests',['tableKind','tableStatus','tableRef','tableLink','inviteMode','invitees','inviteList']);
+ html+=section('Support & announcements',['supportMode','supporters','supportList','shareAnnouncement','social','annContact','annNote','draftPost']);
+ html+=section('Video & travel entries',['videoLink','travel']);
+ html+=`<h3>Uploaded files</h3><p class="pm">Download links are private and expire after 10 minutes. Refresh this record for new links. Files not uploaded to the portal are not available here.</p>`;
+ html+=d.files.length?'<ul class="hon-files">'+d.files.map(f=>`<li><strong>${esc(f.label)}</strong><p>${esc(f.filename)}${f.size_bytes?' · '+(f.size_bytes/1024/1024).toFixed(2)+' MB':''}</p>${f.download_url?`<a href="${esc(f.download_url)}" target="_blank" rel="noopener noreferrer">Download file</a>`:'<span role="alert">File link unavailable — refresh or contact Neha.</span>'}${f.view_url?` · <a href="${esc(f.view_url)}" target="_blank" rel="noopener noreferrer">Open file</a>`:''}</li>`).join('')+'</ul>':'<p class="pm">No files have been uploaded.</p>';
+ html+=`<h3>Travel requests</h3>${honValue(d.travel)}<h3>Portal setup / information on file</h3><p class="pm">These are setup defaults, not necessarily details confirmed by the honoree.</p>${honValue(d.prefill)}<h3>Saved progress & timestamps</h3>${honValue(d.timestamps)}`;
+ const remaining=Object.keys(r).filter(k=>!seen.has(k));if(remaining.length)html+=section('Other saved portal details',remaining);
+ html+=`<h3>Recent portal activity</h3>${d.activity_unavailable?'<p>Activity could not be loaded.</p>':honValue(d.activity)}`;
+ return html;
+}
+function honSave(filename,body,type){const url=URL.createObjectURL(new Blob([body],{type}));const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function bindHon(){
+ let request=0,lastFocus=null;
+ const D=$('drawer');if(!D)return;
+ const close=()=>{request++;D.hidden=true;document.body.style.overflow='';document.removeEventListener('keydown',keys);lastFocus?.focus()};
+ const keys=e=>{if(e.key==='Escape')close();if(e.key==='Tab'){const nodes=[...D.querySelectorAll('button,a[href],input,summary')].filter(x=>!x.hidden);if(!nodes.length)return;const first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}};
+ const wireClose=()=>{D.querySelector('.dr-x').onclick=close;D.querySelector('.dr-bg').onclick=close};
+ async function open(h,el){
+   if(h.open)return;lastFocus=el||lastFocus;const seq=++request;const panel=D.querySelector('.dr-p');D.hidden=false;document.body.style.overflow='hidden';document.removeEventListener('keydown',keys);document.addEventListener('keydown',keys);panel.setAttribute('aria-labelledby','hon-detail-title');
+   panel.innerHTML=`<div class="dr-h"><h2 id="hon-detail-title">${esc(h.name)}</h2><button class="dr-x" aria-label="Close record">×</button></div><p role="status">Loading full portal record…</p>`;wireClose();panel.querySelector('.dr-x').focus();
+   try{
+    if(!h.id)throw Error('No portal record is linked to this entry yet.');
+    const res=await fetch('/api/honoree?id='+encodeURIComponent(h.id));const d=await res.json();if(seq!==request||!data?.leadership)return;if(!res.ok)throw Error(d.error||'Could not load this record.');
+    panel.innerHTML=honDetailMarkup(d,h);wireClose();panel.scrollTop=0;panel.querySelector('.dr-x').focus();
+    $('hon-reload').onclick=()=>open(h);
+    const base=d.name.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+    $('hon-download-record').onclick=()=>{const copy=panel.cloneNode(true);copy.querySelectorAll('button').forEach(b=>b.remove());copy.querySelectorAll('.hon-files a').forEach(a=>a.replaceWith(document.createTextNode(a.textContent+' (open live dashboard for a fresh link)')));honSave(base+'-portal-record.html',`<!doctype html><html lang="en"><meta charset="utf-8"><title>${esc(d.name)} — private portal record</title><style>body{font:15px/1.6 Arial;max-width:850px;margin:40px auto;padding:20px}h3{border-bottom:1px solid #bbb;margin-top:30px}.rr{display:grid;grid-template-columns:200px 1fr;gap:15px;padding:5px}dd{margin:0;overflow-wrap:anywhere}dt{color:#555}button{display:none}</style><p>PRIVATE · SALUTE Leadership · Downloaded ${esc(new Date().toLocaleString())}</p>${copy.innerHTML}</html>`,'text/html;charset=utf-8')};
+    if($('hon-download-bio'))$('hon-download-bio').onclick=()=>honSave(base+'-bio.txt',d.response.bio,'text/plain;charset=utf-8');
+   }catch(e){if(seq!==request)return;panel.innerHTML=`<div class="dr-h"><h2 id="hon-detail-title">${esc(h.name)}</h2><button class="dr-x" aria-label="Close record">×</button></div><p role="alert">${esc(e.message||'Record unavailable')}</p><button id="hon-retry">Try again</button>`;wireClose();$('hon-retry').onclick=()=>open(h);panel.querySelector('.dr-x').focus()}
+ }
+ document.querySelectorAll('[data-hon]').forEach(el=>{const act=()=>{const h=window.__H.find(x=>x.name===el.dataset.hon);if(h)open(h,el)};el.onclick=act;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act()}}});
+}
+
+
 load().catch(()=>{$('error').textContent='Dashboard unavailable'});
