@@ -167,3 +167,5 @@ html,body{background:#fbfbfa!important;color:#090909!important}
 .tdrawer-visual{background:#fff}.pick{border-color:var(--line)}
 .slegend{border-top:1px solid #090909}
 @media print{.psheet,.ptable{font-family:NeueSwiss,Arial,sans-serif}.psheet h1,.psheet h2{font-family:Aperitif,Georgia,serif;font-weight:400}.pbrand{color:#090909;letter-spacing:.3em}.ptable th{border-bottom:1px solid #090909}.rt-seat circle{stroke:#090909!important}}
+.email-cell{word-break:break-all;min-width:180px}
+.email-cell .elabel{display:block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#888}

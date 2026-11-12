@@ -23830,11 +23830,11 @@
     }
   });
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/app.tsx
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/app.tsx
   var import_react3 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/aliases.ts
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/aliases.ts
   var identityAliases = {
     "gitanjalifaleiro": "gitanjalipintofaleiro",
     "sueverma": "suevarma",
@@ -23847,7 +23847,7 @@
     "trishawakhija": "trishasakhujawalia"
   };
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/types.ts
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/types.ts
   var norm = (s) => {
     const k = String(s || "").toLowerCase().replace(/^(?:dr\.?\s+|council member\s+)/, "").replace(/,?\s*md$/, "").replace(/[^a-z0-9]/g, "");
     return identityAliases[k] || k;
@@ -23859,7 +23859,7 @@
   var detail = (g) => g.status === "Registered" ? "confirmed" : g.invStatus === "sent" ? "invited" : g.placeholder ? "name" : (g.emails || []).some((e) => !e.startsWith("Host invite")) ? "emailed" : "noemail";
   var detailLabel = { confirmed: "Confirmed", invited: "Host invited \xB7 not accepted", emailed: "SALUTE emailed \xB7 not confirmed", noemail: "No email sent yet", name: "Name needed" };
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/canonical.ts
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/canonical.ts
   var isUpper = (s) => !!s && s.toUpperCase() !== s.toLowerCase() && s === s.toUpperCase();
   var title = (s) => s.toLowerCase().replace(/(^|[^\p{L}])(\p{L})/gu, (_m, a, b) => a + b.toUpperCase());
   var d10 = (x) => x ? String(x).slice(0, 10) : null;
@@ -24120,7 +24120,7 @@
     return out;
   }
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/data.ts
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/data.ts
   var ROOT = "/tasklet/threads/a_9rhxjqy1qa3tyshp698x/work/apps/ssuite-live-seating/";
   var LIVE_QUERY = `with v as (select public.ssuite_guests_view_raw() as r) select jsonb_build_object('real', r->'real','lead',jsonb_build_object('att',r#>'{lead,att}','tables',r#>'{lead,tables}','via',r#>'{lead,via}')) as raw, public.ssuite_guests_view_get_config('real_overrides') as ov, public.ssuite_guests_view_get_config('lead') as lead, (select coalesce(jsonb_agg(q),'[]'::jsonb) from (select i.id, i.table_id, t.name as table_name, trim(coalesce(h.first_name,'')||' '||coalesce(h.last_name,'')) as host_name, i.attendee_id, i.status as invitation_status, i.first_sent_at, s.seat_number, trim(coalesce(a.first_name,'')||' '||coalesce(a.last_name,'')) as guest_name, a.job_title, a.company, a.registration_status from invitations i join event_tables t on t.id=i.table_id and t.status='active' left join attendees h on h.id=t.lead_attendee_id left join attendees a on a.id=i.attendee_id left join table_seats s on s.id=i.seat_id where i.status in ('queued','sent','completed') and coalesce(a.registration_status,'')<>'cancelled' order by t.created_at,s.seat_number) q) as invitations, (select coalesce(jsonb_agg(jsonb_build_object('name',h.full_name,'honor',h.honor,'status',h.status,'gName',h.response->>'gName','gMeal',h.response->>'gMeal','gAccess',h.response->>'gAccess','done',jsonb_array_length(coalesce(h.response->'done','[]'::jsonb)))),'[]'::jsonb) from ssuite_honorees h where h.access_revoked_at is null and h.full_name not ilike 'test%') as honorees, (select coalesce(jsonb_object_agg(a.id::text, jsonb_build_object('e',a.email,'p',a.phone,'m',n.meal_preference,'d',case when n.has_dietary_or_allergy_needs then n.dietary_or_allergy_details end,'x',case when n.has_accessibility_needs then n.accessibility_details end)),'{}'::jsonb) from attendees a left join attendee_needs n on n.attendee_id=a.id where coalesce(a.registration_status,'')<>'cancelled') as people, (select coalesce(jsonb_object_agg(x.id, x.m),'{}'::jsonb) from (select a.id::text id, jsonb_agg(distinct jsonb_build_object('t',o.message_type,'d',to_char(coalesce(o.accepted_at,o.created_at) at time zone 'America/New_York','Mon DD'))) m from attendees a join ssuite_email_outbox o on o.status='sent' and o.message_type in ('ssuite_finish_registration','ssuite_guest_registration_confirmation','ssuite_paid_order_confirmation') and (o.entity_id::text=a.id::text or (a.email is not null and lower(o.recipient)=lower(a.email))) group by a.id) x) as mail from v;`;
   function parseSql(input) {
@@ -24233,7 +24233,7 @@
         const l = ML[m.t] + " " + m.d;
         if (!emails.includes(l)) emails.push(l);
       }
-      guests.push({ key: k, id: a?.id, name, first: bits.shift() || "", last: bits.join(" "), title: a?.j || person.title || ov?.title || prior?.title || "", company: a?.c || person.org || ov?.organization || prior?.org || "", status, knownComing, source: source + (records.length > 1 ? " \xB7 duplicate-name records; review" : ""), sourceHost: host, sent: inv?.first_sent_at, placeholder, note: person.note || "", origin, emails, honor: hon?.honor, email: a && people[a.id]?.e || "", phone: a && people[a.id]?.p || "", meal: a && people[a.id]?.m || "", diet: a && people[a.id]?.d || "", access: a && people[a.id]?.x || "", invStatus: inv?.invitation_status, portalHost: inv?.host_name || (a ? portal.get(a.id) : "") || "", portalTable: inv?.table_name || (a ? portalT.get(a.id) : "") || "" });
+      guests.push({ key: k, id: a?.id, name, first: bits.shift() || "", last: bits.join(" "), title: a?.j || person.title || ov?.title || prior?.title || "", company: a?.c || person.org || ov?.organization || prior?.org || "", status, knownComing, source: source + (records.length > 1 ? " \xB7 duplicate-name records; review" : ""), sourceHost: host, sent: inv?.first_sent_at, recipientEmail: inv?.recipient_email || cl?.email || "", placeholder, note: person.note || "", origin, emails, honor: hon?.honor, email: a && people[a.id]?.e || "", phone: a && people[a.id]?.p || "", meal: a && people[a.id]?.m || "", diet: a && people[a.id]?.d || "", access: a && people[a.id]?.x || "", invStatus: inv?.invitation_status, portalHost: inv?.host_name || (a ? portal.get(a.id) : "") || "", portalTable: inv?.table_name || (a ? portalT.get(a.id) : "") || "" });
       seen.add(k);
     };
     for (const t of view.tables) for (const person of t.people) add(person, t.host);
@@ -24330,7 +24330,7 @@
     return { guests, canonicalSummary: view.summary, liveAsOf: (/* @__PURE__ */ new Date()).toISOString() };
   }
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/policy.ts
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/policy.ts
   function applyEvidence(p, guests, draft, rules, reset = false) {
     const d = structuredClone(draft);
     const current = new Map(guests.map((g) => [g.key, g]));
@@ -24402,10 +24402,10 @@
     return d;
   }
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/v2/parts.tsx
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/v2/parts.tsx
   var import_react = __toESM(require_react());
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/v2/util.ts
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/v2/util.ts
   var GENERIC = /* @__PURE__ */ new Set(["table", "new live table", "partner table", ""]);
   var tableTitle = (t) => t.host && t.host !== "New table" ? t.host : t.label || "Table " + t.number;
   var tableSub = (t) => !GENERIC.has((t.label || "").toLowerCase()) && norm(t.label) !== norm(t.host) ? t.label : "";
@@ -24458,7 +24458,7 @@
     return [portal, portalTable].filter(Boolean).map(norm).some((p) => p === h || norm(aliases[p] || "") === h || l && l === p);
   }
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/v2/RoundTable.tsx
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/v2/RoundTable.tsx
   var import_jsx_runtime = __toESM(require_jsx_runtime());
   var short = (g) => g.placeholder ? "Guest" : g.first + (g.last ? " " + g.last[0] + "." : "");
   var RoundTable = ({ rows, cap, number, size = 240, full = false, onGuest, title: title2 }) => {
@@ -24483,7 +24483,7 @@
     ] });
   };
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/v2/parts.tsx
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/v2/parts.tsx
   var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var Pill = ({ g }) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "pill d-" + detail(g), children: detailLabel[detail(g)] });
   var Kind = ({ t }) => kindOf(t) ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "kind " + kindClass(t), children: kindOf(t) }) : null;
@@ -24638,9 +24638,13 @@
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("dd", { children: g.origin || "\u2014" }),
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("dt", { children: "Emails sent" }),
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("dd", { children: (g.emails || []).length ? (g.emails || []).map((e) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { children: e }, e)) : "None recorded" }),
-          g.recipientEmail && g.recipientEmail !== g.email && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("dt", { children: "Invite went to" }),
+          g.recipientEmail && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("dt", { children: detail(g) === "invited" ? "Invite sent to" : "Emailed to" }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("dd", { children: g.recipientEmail })
+          ] }),
+          g.email && g.email.toLowerCase() !== (g.recipientEmail || "").toLowerCase() && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("dt", { children: "Email on their record" }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("dd", { children: g.email })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "hint", children: "\u201CEmailed\u201D means our email provider accepted the send, not that it reached the inbox." })
@@ -24904,7 +24908,7 @@
     ] }, id);
   }) });
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/v2/views.tsx
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/v2/views.tsx
   var import_react2 = __toESM(require_react());
   var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var GuestsView = ({ rows, guests, draft, onGuest, onMove }) => {
@@ -24930,6 +24934,7 @@
         /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("th", { children: H("table", "Table") }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("th", { children: "Details" }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("th", { children: "How they\u2019re on the list" }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("th", { children: "Email address" }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("th", { children: "Emails sent" })
       ] }) }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("tbody", { children: [
@@ -24949,9 +24954,25 @@
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { onClick: (e) => e.stopPropagation(), children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(TablePick, { g, guests, draft, onMove }) }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Pill, { g }) }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { className: "sub", children: g.origin }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { className: "sub email-cell", children: (() => {
+            const sent = g.recipientEmail || "", file = g.email || "";
+            if (!sent && !file) return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "muted", children: "None on file" });
+            return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
+              sent && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "elabel", children: detail(g) === "invited" ? "Invite sent to" : "Emailed to" }),
+                " ",
+                sent
+              ] }),
+              file && file.toLowerCase() !== sent.toLowerCase() && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "elabel", children: sent ? "On their record" : "On file" }),
+                " ",
+                file
+              ] })
+            ] });
+          })() }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { className: "sub", children: (g.emails || []).length ? (g.emails || []).map((e) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { children: e }, e)) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "muted", children: "None" }) })
         ] }, g.key)),
-        !sorted.length && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { colSpan: 6, className: "muted center", children: "No one matches these filters." }) })
+        !sorted.length && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { colSpan: 7, className: "muted center", children: "No one matches these filters." }) })
       ] })
     ] }) });
   };
@@ -25080,7 +25101,7 @@
     }) })
   ] });
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/app.tsx
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/app.tsx
   var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   var DETAILS = ["confirmed", "invited", "emailed", "noemail", "name"];
   var App = () => {

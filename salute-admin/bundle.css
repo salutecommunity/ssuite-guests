@@ -1,4 +1,4 @@
-/* ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-3514762e-7e22-439d-b0a1-bf618ca446a0/styles.css */
+/* ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-9c054b2a-db61-4aa8-9180-294ab907227e/styles.css */
 @font-face {
   font-family: Aperitif;
   src: url(https://guests.ssuite.org/assets/aperitifserif-regular.woff);
@@ -1918,4 +1918,15 @@ body {
   .rt-seat circle {
     stroke: #090909 !important;
   }
+}
+.email-cell {
+  word-break: break-all;
+  min-width: 180px;
+}
+.email-cell .elabel {
+  display: block;
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #888;
 }
