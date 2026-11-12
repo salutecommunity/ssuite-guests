@@ -198,3 +198,6 @@ html,body{background:#fbfbfa!important;color:#090909!important}
 .role-honoree{color:#755006;background:#fff0b5;border-color:#b2831e}.role-board{color:#57317d;background:#ebdef8;border-color:#8b61b0}.role-slc{color:#095a61;background:#d5f0ed;border-color:#3c8f93}
 .pair-link{display:block!important;font-size:11px!important;font-weight:700!important;color:#903a62!important;background:#fbe8f0;padding:3px 6px;margin:3px 0;border-left:3px solid #a64d78;white-space:normal}
 .rt-role{font-weight:700}.rt-role.role-honoree{fill:#755006}.rt-role.role-board{fill:#57317d}.rt-role.role-slc{fill:#095a61}
+.meal-flag{display:inline-block!important;font-size:11px!important;font-weight:700!important;color:#8a1f11!important;background:#fdecea;border:1px solid #c0392b;padding:2px 6px;margin:3px 0;letter-spacing:.01em;white-space:normal}
+.diet-note{font-size:12px;font-weight:700;color:#8a1f11;margin-top:2px}
+.kpi.s-meal{border-color:#c0392b}.kpi.s-meal b{color:#a52a1a}.kpi.s-meal.on{background:#fdecea}

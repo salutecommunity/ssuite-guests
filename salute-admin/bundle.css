@@ -1,4 +1,4 @@
-/* ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-56d4b66f-9efb-4612-b92b-ead7c92afdbb/styles.css */
+/* ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-553e1784-5485-4fc5-abdd-9dd0cb5bd498/styles.css */
 @font-face {
   font-family: Aperitif;
   src: url(https://guests.ssuite.org/assets/aperitifserif-regular.woff);
@@ -2137,4 +2137,31 @@ body {
 }
 .rt-role.role-slc {
   fill: #095a61;
+}
+.meal-flag {
+  display: inline-block !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #8a1f11 !important;
+  background: #fdecea;
+  border: 1px solid #c0392b;
+  padding: 2px 6px;
+  margin: 3px 0;
+  letter-spacing: .01em;
+  white-space: normal;
+}
+.diet-note {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8a1f11;
+  margin-top: 2px;
+}
+.kpi.s-meal {
+  border-color: #c0392b;
+}
+.kpi.s-meal b {
+  color: #a52a1a;
+}
+.kpi.s-meal.on {
+  background: #fdecea;
 }
