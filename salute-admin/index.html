@@ -1,0 +1,342 @@
+<!doctype html>
+<html data-tasklet-theme data-theme="alfred-light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <title>SALUTE Admin · Seating</title>
+    <style>
+      #sa-gate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#0f1d33;font-family:Inter,system-ui,sans-serif}
+      #sa-gate form{background:#fbf8f1;padding:40px 36px;border-radius:14px;width:min(380px,90vw);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+      #sa-gate h1{margin:0 0 4px;font-size:13px;letter-spacing:.18em;color:#9a7b3c;font-weight:600}
+      #sa-gate h2{margin:0 0 22px;font-size:22px;color:#0f1d33;font-weight:600}
+      #sa-gate input{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid #cfc6b2;border-radius:8px;font-size:15px;background:#fff;color:#0f1d33;text-transform:uppercase}
+      #sa-gate button{margin-top:14px;width:100%;padding:12px;border:0;border-radius:8px;background:#0f1d33;color:#fbf8f1;font-size:15px;font-weight:600;cursor:pointer}
+      #sa-gate p{margin:12px 0 0;font-size:13px;color:#a33;min-height:18px}
+      #sa-bar{position:fixed;right:14px;bottom:14px;z-index:9998;font:12px Inter,system-ui,sans-serif}
+      #sa-bar button{padding:6px 12px;border-radius:999px;border:1px solid #cfc6b2;background:#fbf8f1;color:#0f1d33;cursor:pointer}
+    </style>
+    <script>
+    (function(){
+      var API='https://iddzcbknnddkonrcwgpt.supabase.co/functions/v1/admin-seating', KEY='salute_admin_seating_token';
+      function tok(){try{var t=JSON.parse(localStorage.getItem(KEY)||'null');if(t&&t.exp>Date.now())return t.v;}catch(e){}localStorage.removeItem(KEY);return null;}
+      function signOut(){localStorage.removeItem(KEY);location.reload();}
+      async function call(path,opts){opts=opts||{};var r=await fetch(API+path,Object.assign({},opts,{headers:{'authorization':'Bearer '+tok(),'content-type':'application/json'}}));var j={};try{j=await r.json();}catch(e){}if(r.status===401){signOut();throw new Error('Your session expired. Please sign in again.');}if(!r.ok)throw new Error(j.error||'Request failed');return j;}
+      var state=null, pendingAudit=null;
+      function getState(){if(!state)state=call('/state');return state;}
+      window.tasklet={
+        readFileFromDisk:async function(p){var n=String(p).split('/').pop();if(n==='draft-state.json')return JSON.stringify(await call('/draft'));var s=await getState();var m={'prior-manual-list.json':s.manual,'placement-rules.json':s.rules,'confirm-email-log.json':s.confirmlog};if(!(n in m))throw new Error('Not available');return JSON.stringify(m[n]==null?{}:m[n]);},
+        writeFileToDisk:async function(p,c){if(String(p).indexOf('/history/')>=0){pendingAudit=JSON.parse(c);return {success:true};}if(String(p).endsWith('draft-state.json')){var body=JSON.stringify({draft:JSON.parse(c),audit:pendingAudit});pendingAudit=null;await call('/save',{method:'POST',body:body});return {success:true};}throw new Error('Not allowed');},
+        invokeTool:async function(){return [await call('/live')];}
+      };
+      function start(){var b=document.createElement('div');b.id='sa-bar';b.innerHTML='<button type="button">Sign out</button>';b.firstChild.onclick=signOut;document.body.appendChild(b);var s=document.createElement('script');s.src='bundle.js';document.body.appendChild(s);}
+      document.addEventListener('DOMContentLoaded',function(){
+        if(tok())return start();
+        var g=document.createElement('div');g.id='sa-gate';g.innerHTML='<form autocomplete="off"><h1>SALUTE ADMIN</h1><h2>Guests &amp; Seating</h2><input type="password" placeholder="Admin passcode" aria-label="Admin passcode" autofocus /><button type="submit">Sign in</button><p></p></form>';document.body.appendChild(g);
+        var f=g.querySelector('form'),i=g.querySelector('input'),m=g.querySelector('p');
+        f.onsubmit=async function(e){e.preventDefault();m.textContent='';f.querySelector('button').disabled=true;try{var r=await fetch(API+'/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({passcode:i.value})});var j=await r.json();if(!r.ok||!j.token)throw new Error(j.error||'Sign in failed');localStorage.setItem(KEY,JSON.stringify({v:j.token,exp:Date.now()+11.5*3600*1000}));g.remove();start();}catch(err){m.textContent=err.message;f.querySelector('button').disabled=false;}};
+      });
+    })();
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.2.8/index.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5/colors/properties-extended.css" type="text/css" />
+    <link rel="stylesheet" href="bundle.css" />
+    <style>/* Instant-app theme. Values mirror the canonical brand tokens in
+   app/webclient/src/index.css (Tasklet Brand Book). This is a standalone bundle
+   that cannot import those tokens, so the hexes are duplicated here — keep them
+   in sync with the alfred-light / alfred-dark theme blocks in index.css. */
+[data-theme='alfred-light'] {
+  color-scheme: light;
+  --radius-selector: 0rem;
+  --radius-field: 0.625rem;
+  --radius-box: 0.9375rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+  --color-base-100: #f5f5f5;
+  --color-base-200: #eaeaea;
+  --color-base-300: #dfdfdf;
+  --color-base-content: #121215;
+  --color-primary: #4e814e;
+  --color-primary-content: #f5f5f5;
+  --color-secondary: #676caa;
+  --color-secondary-content: #f5f5f5;
+  --color-accent: #676caa;
+  --color-accent-content: #f5f5f5;
+  --color-neutral: #09342a;
+  --color-neutral-content: #f5f5f5;
+  --color-info: #676caa;
+  --color-info-content: #f5f5f5;
+  --color-success: #4e814e;
+  --color-success-content: #f5f5f5;
+  --color-warning: #b8860b;
+  --color-warning-content: #121215;
+  --color-coral: #ff7542;
+  --color-coral-80: #803b21;
+  --color-error: #9e3d32;
+  --color-error-content: #f5f5f5;
+}
+[data-theme='alfred-dark'] {
+  color-scheme: dark;
+  --radius-selector: 0rem;
+  --radius-field: 0.625rem;
+  --radius-box: 0.9375rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+  --color-base-100: #121215;
+  --color-base-200: #1a1a1e;
+  --color-base-300: #252529;
+  --color-base-content: #f5f5f5;
+  --color-primary: #4e814e;
+  --color-primary-content: #f5f5f5;
+  --color-secondary: #9aa2ff;
+  --color-secondary-content: #121215;
+  --color-accent: #9aa2ff;
+  --color-accent-content: #121215;
+  --color-neutral: #3a3a42;
+  --color-neutral-content: #b8b8c0;
+  --color-info: #9aa2ff;
+  --color-info-content: #121215;
+  --color-success: #c0ffab;
+  --color-success-content: #121215;
+  --color-warning: #b8860b;
+  --color-warning-content: #121215;
+  --color-coral: #ff7542;
+  --color-coral-80: #803b21;
+  --color-error: #9e3d32;
+  --color-error-content: #f5f5f5;
+}
+
+[data-theme='alfred-dark'] .progress-primary {
+  color: var(--color-chart-1);
+}
+
+html,
+html body {
+  font-family:
+    'Inter',
+    -apple-system,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+}
+
+[data-theme] .badge {
+  border-radius: var(--radius-field);
+  white-space: nowrap;
+}
+
+/* Keep warning alerts readable when their solid DaisyUI surface is replaced
+   with the common translucent warning treatment. */
+[data-theme] .alert-warning[class~='bg-warning/10'] {
+  color: var(--color-warning);
+}
+
+[data-theme='alfred-dark'] .alert-warning[class~='bg-warning/10'] {
+  color: var(--color-coral);
+}
+
+/* DaisyUI outlines selects with base-content whenever they open. Keep pointer
+   focus calm and distinguish keyboard focus with a surface change instead. */
+[data-theme] .select:focus,
+[data-theme] .select:focus-within {
+  --input-color: color-mix(in srgb, var(--color-base-content) 20%, transparent);
+  outline: none;
+}
+
+[data-theme] .select:focus-visible,
+[data-theme] .select:has(select:focus-visible) {
+  background-color: var(--color-base-200);
+}
+
+/* Direct accent/status text uses the brighter dark-theme brand colors. Filled
+   controls continue to use the canonical DaisyUI background tokens above. */
+[data-theme='alfred-dark'] .text-primary,
+[data-theme='alfred-dark'] .text-success {
+  color: var(--color-chart-1);
+}
+
+[data-theme='alfred-dark'] .text-error,
+[data-theme='alfred-dark'] .text-warning {
+  color: var(--color-coral);
+}
+
+/* Canonical chart and calendar styling for generated Tasklet interfaces. */
+[data-theme='alfred-light'] {
+  --color-chart-1: #4e814e;
+  --color-chart-2: #676caa;
+  --color-chart-3: #ff7542;
+  --color-chart-4: #09342a;
+  --color-chart-5: #6c966c;
+  --color-chart-6: var(--color-warning);
+}
+[data-theme='alfred-dark'] {
+  --color-chart-1: #c0ffab;
+  --color-chart-2: #9aa2ff;
+  --color-chart-3: #ff7542;
+  --color-chart-4: #a0d58f;
+  --color-chart-5: #b8b8c0;
+  --color-chart-6: var(--color-warning);
+}
+/* Theme-safe defaults for Recharts chrome. Apps choose series colors; the
+   platform owns readable axes, grids, legends, cursors, and default tooltips. */
+[data-theme='alfred-light'],
+[data-theme='alfred-dark'] {
+  --color-chart-grid: color-mix(in srgb, var(--color-base-content) 14%, transparent);
+  --color-chart-muted: color-mix(in srgb, var(--color-base-content) 62%, transparent);
+  --color-chart-cursor: color-mix(in srgb, var(--color-base-content) 6%, transparent);
+}
+
+/* react-day-picker inherits Tasklet surfaces and interaction colors. */
+[data-theme='alfred-light'] .rdp-root,
+[data-theme='alfred-dark'] .rdp-root {
+  --rdp-accent-color: var(--color-primary);
+  --rdp-accent-background-color: color-mix(in srgb, var(--color-primary) 16%, transparent);
+  --rdp-day-height: 2.25rem;
+  --rdp-day-width: 2.25rem;
+  --rdp-day_button-height: 2.25rem;
+  --rdp-day_button-width: 2.25rem;
+  --rdp-day_button-border-radius: var(--radius-field);
+  --rdp-dropdown-gap: 0.25rem;
+  --rdp-months-gap: 1rem;
+  --rdp-nav-height: 2.25rem;
+  --rdp-nav_button-height: 2rem;
+  --rdp-nav_button-width: 2rem;
+  --rdp-selected-border: 0;
+  --rdp-today-color: var(--color-primary);
+  --rdp-weekday-padding: 0.25rem 0;
+  color: var(--color-base-content);
+  font-size: 0.875rem;
+}
+
+[data-theme] .rdp-month_caption {
+  font-size: inherit;
+}
+
+[data-theme] .rdp-button_next,
+[data-theme] .rdp-button_previous {
+  border-radius: var(--radius-field);
+}
+
+[data-theme] .rdp-selected {
+  font-size: inherit;
+  font-weight: 600;
+}
+
+[data-theme='alfred-light'] .rdp-selected:not(.rdp-range_middle) .rdp-day_button,
+[data-theme='alfred-dark'] .rdp-selected:not(.rdp-range_middle) .rdp-day_button {
+  background-color: var(--color-primary);
+  color: var(--color-primary-content);
+}
+
+[data-theme] .rdp-day:not(.rdp-selected) .rdp-day_button:hover:not(:disabled),
+[data-theme] .rdp-button_next:hover:not(:disabled),
+[data-theme] .rdp-button_previous:hover:not(:disabled) {
+  background-color: var(--color-base-300);
+}
+
+[data-theme] .rdp-root button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+[data-theme] .recharts-cartesian-grid line {
+  stroke: var(--color-chart-grid);
+}
+
+[data-theme] .recharts-cartesian-axis-tick-value,
+[data-theme] .recharts-polar-angle-axis-tick-value,
+[data-theme] .recharts-polar-radius-axis-tick-value {
+  fill: var(--color-chart-muted);
+}
+
+[data-theme] .recharts-legend-item-text {
+  color: var(--color-base-content) !important;
+}
+
+[data-theme] .recharts-tooltip-cursor {
+  fill: var(--color-chart-cursor);
+  stroke: var(--color-chart-grid);
+}
+
+[data-theme] .recharts-default-tooltip {
+  color: var(--color-base-content) !important;
+  background: var(--color-base-200) !important;
+  border: 1px solid var(--color-base-300) !important;
+  border-radius: var(--radius-box) !important;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--color-base-content) 12%, transparent);
+}
+
+[data-theme] .recharts-tooltip-label,
+[data-theme] .recharts-tooltip-item {
+  color: var(--color-base-content) !important;
+}
+
+/* Keep chart tooltips above labels or totals layered over the plotting area. */
+[data-theme] .recharts-tooltip-wrapper {
+  z-index: 1;
+}
+
+/* Remove Recharts' hard-coded white outlines from filled chart marks. */
+:where(
+  [data-theme] .recharts-pie-sector path[stroke='#fff' i],
+  [data-theme] .recharts-pie-sector path[stroke='white' i],
+  [data-theme] .recharts-funnel-trapezoid path[stroke='#fff' i],
+  [data-theme] .recharts-funnel-trapezoid path[stroke='white' i]
+) {
+  stroke: none;
+}
+
+/* Fill Recharts' default white line dots with their theme-aware series color. */
+:where([data-theme] .recharts-dot[stroke*='--color-chart-1']) {
+  --tasklet-chart-dot-color: var(--color-chart-1);
+}
+:where([data-theme] .recharts-dot[stroke*='--color-chart-2']) {
+  --tasklet-chart-dot-color: var(--color-chart-2);
+}
+:where([data-theme] .recharts-dot[stroke*='--color-chart-3']) {
+  --tasklet-chart-dot-color: var(--color-chart-3);
+}
+:where([data-theme] .recharts-dot[stroke*='--color-chart-4']) {
+  --tasklet-chart-dot-color: var(--color-chart-4);
+}
+:where([data-theme] .recharts-dot[stroke*='--color-chart-5']) {
+  --tasklet-chart-dot-color: var(--color-chart-5);
+}
+:where(
+  [data-theme] .recharts-dot[stroke*='--color-chart-1']:is([fill='#fff' i], [fill='white' i]),
+  [data-theme] .recharts-dot[stroke*='--color-chart-2']:is([fill='#fff' i], [fill='white' i]),
+  [data-theme] .recharts-dot[stroke*='--color-chart-3']:is([fill='#fff' i], [fill='white' i]),
+  [data-theme] .recharts-dot[stroke*='--color-chart-4']:is([fill='#fff' i], [fill='white' i]),
+  [data-theme] .recharts-dot[stroke*='--color-chart-5']:is([fill='#fff' i], [fill='white' i])
+) {
+  fill: var(--tasklet-chart-dot-color);
+  stroke: var(--tasklet-chart-dot-color);
+}
+</style>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <script>
+      (function() {
+        var theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'alfred-dark' : 'alfred-light';
+        document.documentElement.setAttribute('data-theme', theme);
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+          document.documentElement.setAttribute('data-theme', e.matches ? 'alfred-dark' : 'alfred-light');
+        });
+      })();
+    </script>
+  </head>
+  <body class="bg-base-100 text-base-content">
+    <div id="root"></div>
+    
+  </body>
+</html>
