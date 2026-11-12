@@ -30,7 +30,7 @@
         writeFileToDisk:async function(p,c){if(String(p).indexOf('/history/')>=0){pendingAudit=JSON.parse(c);return {success:true};}if(String(p).endsWith('draft-state.json')){var body=JSON.stringify({draft:JSON.parse(c),audit:pendingAudit});pendingAudit=null;await call('/save',{method:'POST',body:body});return {success:true};}throw new Error('Not allowed');},
         invokeTool:async function(){return [await call('/live')];}
       };
-      function start(){var b=document.createElement('div');b.id='sa-bar';b.innerHTML='<button type="button">Sign out</button>';b.firstChild.onclick=signOut;document.body.appendChild(b);var s=document.createElement('script');s.src='bundle.js';document.body.appendChild(s);}
+      function start(){var b=document.createElement('div');b.id='sa-bar';b.innerHTML='<button type="button">Sign out</button>';b.firstChild.onclick=signOut;document.body.appendChild(b);var s=document.createElement('script');s.src='bundle.js?v=1794464598';document.body.appendChild(s);}
       document.addEventListener('DOMContentLoaded',function(){
         if(tok())return start();
         var g=document.createElement('div');g.id='sa-gate';g.innerHTML='<form autocomplete="off"><h1>SALUTE ADMIN</h1><h2>Guests &amp; Seating</h2><input type="password" placeholder="Admin passcode" aria-label="Admin passcode" autofocus /><button type="submit">Sign in</button><p></p></form>';document.body.appendChild(g);
@@ -43,7 +43,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.2.8/index.css" type="text/css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5" type="text/css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5/colors/properties-extended.css" type="text/css" />
-    <link rel="stylesheet" href="bundle.css" />
+    <link rel="stylesheet" href="bundle.css?v=1794464598" />
     <style>/* Instant-app theme. Values mirror the canonical brand tokens in
    app/webclient/src/index.css (Tasklet Brand Book). This is a standalone bundle
    that cannot import those tokens, so the hexes are duplicated here — keep them
