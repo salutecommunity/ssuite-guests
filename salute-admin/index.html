@@ -327,7 +327,7 @@ html body {
 
     <script>
       (function() {
-        var theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'alfred-dark' : 'alfred-light';
+        var theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'alfred-light' : 'alfred-light';
         document.documentElement.setAttribute('data-theme', theme);
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
           document.documentElement.setAttribute('data-theme', 'alfred-light');

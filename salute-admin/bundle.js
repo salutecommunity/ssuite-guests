@@ -23830,11 +23830,11 @@
     }
   });
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-f943c274-802e-490f-a558-7ec895801f44/app.tsx
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-756e9f47-b952-4526-b726-bf07175c687c/app.tsx
   var import_react3 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-f943c274-802e-490f-a558-7ec895801f44/aliases.ts
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-756e9f47-b952-4526-b726-bf07175c687c/aliases.ts
   var identityAliases = {
     "gitanjalifaleiro": "gitanjalipintofaleiro",
     "sueverma": "suevarma",
@@ -23847,7 +23847,7 @@
     "trishawakhija": "trishasakhujawalia"
   };
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-f943c274-802e-490f-a558-7ec895801f44/types.ts
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-756e9f47-b952-4526-b726-bf07175c687c/types.ts
   var norm = (s) => {
     const k = String(s || "").toLowerCase().replace(/^(?:dr\.?\s+|council member\s+)/, "").replace(/,?\s*md$/, "").replace(/[^a-z0-9]/g, "");
     return identityAliases[k] || k;
@@ -23859,7 +23859,7 @@
   var detail = (g) => g.status === "Registered" ? "confirmed" : g.invStatus === "sent" ? "invited" : g.placeholder ? "name" : (g.emails || []).some((e) => !e.startsWith("Host invite")) ? "emailed" : "noemail";
   var detailLabel = { confirmed: "Confirmed", invited: "Host invited \xB7 not accepted", emailed: "SALUTE emailed \xB7 not confirmed", noemail: "No email sent yet", name: "Name needed" };
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-f943c274-802e-490f-a558-7ec895801f44/canonical.ts
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-756e9f47-b952-4526-b726-bf07175c687c/canonical.ts
   var isUpper = (s) => !!s && s.toUpperCase() !== s.toLowerCase() && s === s.toUpperCase();
   var title = (s) => s.toLowerCase().replace(/(^|[^\p{L}])(\p{L})/gu, (_m, a, b) => a + b.toUpperCase());
   var d10 = (x) => x ? String(x).slice(0, 10) : null;
@@ -24120,7 +24120,7 @@
     return out;
   }
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-f943c274-802e-490f-a558-7ec895801f44/data.ts
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-756e9f47-b952-4526-b726-bf07175c687c/data.ts
   var ROOT = "/tasklet/threads/a_9rhxjqy1qa3tyshp698x/work/apps/ssuite-live-seating/";
   var LIVE_QUERY = `with v as (select public.ssuite_guests_view_raw() as r) select jsonb_build_object('real', r->'real','lead',jsonb_build_object('att',r#>'{lead,att}','tables',r#>'{lead,tables}','via',r#>'{lead,via}')) as raw, public.ssuite_guests_view_get_config('real_overrides') as ov, public.ssuite_guests_view_get_config('lead') as lead, (select coalesce(jsonb_agg(q),'[]'::jsonb) from (select i.id, i.table_id, t.name as table_name, trim(coalesce(h.first_name,'')||' '||coalesce(h.last_name,'')) as host_name, i.attendee_id, i.status as invitation_status, i.first_sent_at, s.seat_number, trim(coalesce(a.first_name,'')||' '||coalesce(a.last_name,'')) as guest_name, a.job_title, a.company, a.registration_status from invitations i join event_tables t on t.id=i.table_id and t.status='active' left join attendees h on h.id=t.lead_attendee_id left join attendees a on a.id=i.attendee_id left join table_seats s on s.id=i.seat_id where i.status in ('queued','sent','completed') and coalesce(a.registration_status,'')<>'cancelled' order by t.created_at,s.seat_number) q) as invitations, (select coalesce(jsonb_agg(jsonb_build_object('name',h.full_name,'honor',h.honor,'status',h.status,'gName',h.response->>'gName','gMeal',h.response->>'gMeal','gAccess',h.response->>'gAccess','done',jsonb_array_length(coalesce(h.response->'done','[]'::jsonb)))),'[]'::jsonb) from ssuite_honorees h where h.access_revoked_at is null and h.full_name not ilike 'test%') as honorees, (select coalesce(jsonb_object_agg(a.id::text, jsonb_build_object('e',a.email,'p',a.phone,'m',n.meal_preference,'d',case when n.has_dietary_or_allergy_needs then n.dietary_or_allergy_details end,'x',case when n.has_accessibility_needs then n.accessibility_details end)),'{}'::jsonb) from attendees a left join attendee_needs n on n.attendee_id=a.id where coalesce(a.registration_status,'')<>'cancelled') as people, (select coalesce(jsonb_object_agg(x.id, x.m),'{}'::jsonb) from (select a.id::text id, jsonb_agg(distinct jsonb_build_object('t',o.message_type,'d',to_char(coalesce(o.accepted_at,o.created_at) at time zone 'America/New_York','Mon DD'))) m from attendees a join ssuite_email_outbox o on o.status='sent' and o.message_type in ('ssuite_finish_registration','ssuite_guest_registration_confirmation','ssuite_paid_order_confirmation') and (o.entity_id::text=a.id::text or (a.email is not null and lower(o.recipient)=lower(a.email))) group by a.id) x) as mail from v;`;
   function parseSql(input) {
@@ -24330,7 +24330,7 @@
     return { guests, canonicalSummary: view.summary, liveAsOf: (/* @__PURE__ */ new Date()).toISOString() };
   }
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-f943c274-802e-490f-a558-7ec895801f44/policy.ts
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-756e9f47-b952-4526-b726-bf07175c687c/policy.ts
   function applyEvidence(p, guests, draft, rules, reset = false) {
     const d = structuredClone(draft);
     const current = new Map(guests.map((g) => [g.key, g]));
@@ -24402,10 +24402,10 @@
     return d;
   }
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-f943c274-802e-490f-a558-7ec895801f44/v2/parts.tsx
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-756e9f47-b952-4526-b726-bf07175c687c/v2/parts.tsx
   var import_react = __toESM(require_react());
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-f943c274-802e-490f-a558-7ec895801f44/v2/util.ts
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-756e9f47-b952-4526-b726-bf07175c687c/v2/util.ts
   var GENERIC = /* @__PURE__ */ new Set(["table", "new live table", "partner table", ""]);
   var tableTitle = (t) => t.host && t.host !== "New table" ? t.host : t.label || "Table " + t.number;
   var tableSub = (t) => !GENERIC.has((t.label || "").toLowerCase()) && norm(t.label) !== norm(t.host) ? t.label : "";
@@ -24458,7 +24458,7 @@
     return [portal, portalTable].filter(Boolean).map(norm).some((p) => p === h || norm(aliases[p] || "") === h || l && l === p);
   }
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-f943c274-802e-490f-a558-7ec895801f44/v2/RoundTable.tsx
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-756e9f47-b952-4526-b726-bf07175c687c/v2/RoundTable.tsx
   var import_jsx_runtime = __toESM(require_jsx_runtime());
   var short = (g) => g.placeholder ? "Guest" : g.first + (g.last ? " " + g.last[0] + "." : "");
   var RoundTable = ({ rows, cap, number, size = 240, full = false, onGuest, title: title2 }) => {
@@ -24483,7 +24483,7 @@
     ] });
   };
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-f943c274-802e-490f-a558-7ec895801f44/v2/parts.tsx
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-756e9f47-b952-4526-b726-bf07175c687c/v2/parts.tsx
   var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var Pill = ({ g }) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "pill d-" + detail(g), children: detailLabel[detail(g)] });
   var Kind = ({ t }) => kindOf(t) ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "kind " + kindClass(t), children: kindOf(t) }) : null;
@@ -24516,7 +24516,7 @@
     }, [onClose]);
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "overlay", onMouseDown: (e) => {
       if (e.target === e.currentTarget) onClose();
-    }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("aside", { className: "drawer" + (wide ? " wide" : ""), role: "dialog", "aria-modal": "true", children: [
+    }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("aside", { className: "sdrawer" + (wide ? " wide" : ""), role: "dialog", "aria-modal": "true", children: [
       /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "drawer-head", children: [
         /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "drawer-title", children: title2 }),
@@ -24537,7 +24537,7 @@
     }, [onClose]);
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "overlay center", onMouseDown: (e) => {
       if (e.target === e.currentTarget) onClose();
-    }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "modal-card", role: "dialog", "aria-modal": "true", children: [
+    }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "smodal", role: "dialog", "aria-modal": "true", children: [
       /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "drawer-head", children: [
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "drawer-title", children: title2 }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "x", onClick: onClose, "aria-label": "Close", children: "\xD7" })
@@ -24600,7 +24600,7 @@
             ] }, x.key)) })
           ] })
         ] }),
-        t && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("button", { className: "link", onClick: () => onTable(t), children: [
+        t && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("button", { className: "slink", onClick: () => onTable(t), children: [
           "Open Table ",
           t.number,
           " \u2192"
@@ -24624,8 +24624,8 @@
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h4", { children: "Details" }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(GuestFormFields, { f, set: setF }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "actions", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn primary", disabled: !changed || !f.name.trim(), onClick: () => onSave(g, f), children: "Save details" }),
-          changed && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn ghost", onClick: () => setF(formOf(g)), children: "Cancel" })
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn primary", disabled: !changed || !f.name.trim(), onClick: () => onSave(g, f), children: "Save details" }),
+          changed && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn ghost", onClick: () => setF(formOf(g)), children: "Cancel" })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "hint", children: "Saved to your dashboard only. It doesn\u2019t change their registration or send anything." })
       ] }),
@@ -24645,7 +24645,7 @@
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "hint", children: "\u201CEmailed\u201D means our email provider accepted the send, not that it reached the inbox." })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "actions end", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn danger", onClick: () => {
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "actions end", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn danger", onClick: () => {
         if (confirm("Remove " + g.name + " from this dashboard? You can restore them from \u201CRemoved\u201D.")) onRemove(g);
       }, children: "Remove from list" }) })
     ] });
@@ -24678,9 +24678,9 @@
       /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "tdrawer-visual", children: [
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(RoundTable, { rows, cap: t.cap, number: t.number, size: 460, full: true, onGuest: p.onGuest, title: tableTitle(t) }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "actions center", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn primary", onClick: () => p.onAdd(t), disabled: rows.length >= t.cap, children: "+ Add guest to this table" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn", onClick: () => p.onExport(t), children: "Export table (CSV)" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn", onClick: () => p.onPrint(t), children: "Print / save PDF" })
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn primary", onClick: () => p.onAdd(t), disabled: rows.length >= t.cap, children: "+ Add guest to this table" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn", onClick: () => p.onExport(t), children: "Export table (CSV)" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn", onClick: () => p.onPrint(t), children: "Print / save PDF" })
         ] })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
@@ -24742,8 +24742,8 @@
             ] })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "actions", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn " + (fin ? "" : "primary"), onClick: () => p.onFinal(t), children: fin ? "Reopen table" : "Mark table final" }),
-            !rows.length && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn danger", onClick: () => p.onDelete(t), children: "Delete empty table" })
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn " + (fin ? "" : "primary"), onClick: () => p.onFinal(t), children: fin ? "Reopen table" : "Mark table final" }),
+            !rows.length && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn danger", onClick: () => p.onDelete(t), children: "Delete empty table" })
           ] })
         ] })
       ] })
@@ -24768,7 +24768,7 @@
         ] })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Pill, { g }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn sm primary", disabled: open <= 0, onClick: () => {
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn sm primary", disabled: open <= 0, onClick: () => {
         onMove(g, t.id);
         if (open <= 1) onClose();
       }, children: move ? "Move here" : "Add" })
@@ -24797,21 +24797,21 @@
             !others.length && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("li", { className: "muted", children: "No matches." })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "actions", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn", onClick: () => {
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "actions", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn", onClick: () => {
           setCreating(true);
           setF({ ...formOf(), name: q });
         }, children: "+ Someone new who isn\u2019t on the list" }) })
       ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(GuestFormFields, { f, set: setF }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "actions", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("button", { className: "btn primary", disabled: !f.name.trim() || open <= 0, onClick: () => {
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("button", { className: "sbtn primary", disabled: !f.name.trim() || open <= 0, onClick: () => {
             onCreate(f, t.id);
             onClose();
           }, children: [
             "Add to Table ",
             t.number
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn ghost", onClick: () => setCreating(false), children: "Back" })
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn ghost", onClick: () => setCreating(false), children: "Back" })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "hint", children: "Adds them to your dashboard only \u2014 no ticket is created and nothing is sent." })
       ] })
@@ -24837,7 +24837,7 @@
           })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "actions", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn primary", disabled: !f.name.trim(), onClick: () => {
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "actions", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn primary", disabled: !f.name.trim(), onClick: () => {
         onCreate(f, table);
         onClose();
       }, children: "Add guest" }) }),
@@ -24849,14 +24849,14 @@
     const ids = tables.map((t) => t.id);
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(Modal, { title: tables.length === 1 ? "Share Table " + tables[0].number + " \xB7 " + tableTitle(tables[0]) : "Print all tables", onClose, children: [
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "muted", children: tables.length === 1 ? "Print or save a PDF with the round place-setting view and the seat list \u2014 ready to send to the host." : "One page per table with the round place-setting view and seat list." }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { className: "check", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { className: "scheck", children: [
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "checkbox", checked: diet, onChange: (e) => setDiet(e.target.checked) }),
         " Include meal and dietary notes"
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "hint", children: "Emails, phone numbers and confirmation status are left off so it\u2019s safe to share with a host." }),
       /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "actions", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn primary", onClick: () => onPrint(ids, diet), children: "Print / save as PDF" }),
-        tables.length === 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn", onClick: () => onCsv(ids, diet), children: "Download CSV" })
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn primary", onClick: () => onPrint(ids, diet), children: "Print / save as PDF" }),
+        tables.length === 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "sbtn", onClick: () => onCsv(ids, diet), children: "Download CSV" })
       ] })
     ] });
   };
@@ -24904,7 +24904,7 @@
     ] }, id);
   }) });
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-f943c274-802e-490f-a558-7ec895801f44/v2/views.tsx
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-756e9f47-b952-4526-b726-bf07175c687c/v2/views.tsx
   var import_react2 = __toESM(require_react());
   var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var GuestsView = ({ rows, guests, draft, onGuest, onMove }) => {
@@ -24981,7 +24981,7 @@
       }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "hold-head", children: [
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h3", { children: "Holding area" }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "count", children: guests.filter((g) => !assigned(g, draft)?.table).length })
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "scount", children: guests.filter((g) => !assigned(g, draft)?.table).length })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "muted small", children: "Coming but not seated yet. Pick a table, or drag a name onto a table." }),
         /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("input", { className: "search sm", placeholder: "Search holding area", value: hq, onChange: (e) => setHq(e.target.value) }),
@@ -25080,7 +25080,7 @@
     }) })
   ] });
 
-  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-f943c274-802e-490f-a558-7ec895801f44/app.tsx
+  // ../../tmp/tasklet-app-builds/ssuite-live-seating-1b5d9b609433-756e9f47-b952-4526-b726-bf07175c687c/app.tsx
   var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   var DETAILS = ["confirmed", "invited", "emailed", "noemail", "name"];
   var App = () => {
@@ -25405,7 +25405,7 @@
       setOrigin("all");
       setMode("list");
     };
-    const Stat = ({ n, l, cls = "", on }) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("button", { className: "stat " + cls, onClick: on, disabled: !on, children: [
+    const Stat = ({ n, l, cls = "", on }) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("button", { className: "kpi " + cls, onClick: on, disabled: !on, children: [
       /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("b", { children: n }),
       /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: l })
     ] });
@@ -25430,7 +25430,7 @@
           }, children: "Undo" }),
           /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "menuwrap", children: [
             /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: "tbtn", onClick: () => setMenu(!menu), children: "Export \u25BE" }),
-            menu && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "menu", onMouseLeave: () => setMenu(false), children: [
+            menu && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "dmenu", onMouseLeave: () => setMenu(false), children: [
               /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { onClick: () => {
                 exportAll(guests, draft);
                 setMenu(false);
@@ -25458,7 +25458,7 @@
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: "tbtn gold", onClick: () => setNewGuest(true), children: "+ Guest" })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("section", { className: "stats", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("section", { className: "kpis", children: [
         /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Stat, { n: guests.length, l: "On the list", on: () => goList("all") }),
         /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Stat, { n: seated, l: "Seated \xB7 " + cap + " seats", on: () => setMode("tables") }),
         /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Stat, { n: hold, l: "Holding area", cls: "s-hold", on: () => {
@@ -25471,7 +25471,7 @@
         DETAILS.map((d) => /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Stat, { n: counts[d], l: detailLabel[d], cls: "d-" + d + (status === d && mode === "list" ? " on" : ""), on: () => goList(d) }, d)),
         mismatches.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Stat, { n: mismatches.length, l: "Differ from table page", cls: "s-warn", on: () => goList("mismatch") })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("nav", { className: "tabs", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("nav", { className: "navtabs", children: [
         /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { children: [["tables", "Tables"], ["list", "Guest list"], ["floor", "Place settings"]].map(([k, l]) => /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: mode === k ? "on" : "", onClick: () => setMode(k), children: l }, k)) }),
         /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "filters", children: [
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("input", { className: "search", placeholder: mode === "tables" ? "Find a guest or table\u2026" : "Search name, company, email, host\u2026", value: q, onChange: (e) => setQ(e.target.value) }),
@@ -25508,7 +25508,7 @@
               " shown"
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("button", { className: "link small", onClick: () => setShowRemoved(!showRemoved), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("button", { className: "slink small", onClick: () => setShowRemoved(!showRemoved), children: [
             "Removed (",
             (draft.excluded || []).length,
             ")"
@@ -25519,7 +25519,7 @@
         error,
         /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { onClick: () => setError(""), children: "Dismiss" })
       ] }),
-      notice && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "toast", children: notice }),
+      notice && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "stoast", children: notice }),
       showRemoved && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "banner", children: [
         /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("b", { children: "Removed from this dashboard:" }),
         (draft.excluded || []).map((k) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "rm", children: [
@@ -25531,7 +25531,7 @@
         mode === "list" && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(GuestsView, { rows: filtered, guests, draft, onGuest: (g) => setGSel(g.key), onMove: move }),
         mode === "tables" && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(TablesView, { guests, draft, q, onGuest: (g) => setGSel(g.key), onTable: (t) => setTSel(t.id), onMove: move, onDropAt: dropAt, onAdd: (t) => setAddTo(t.id), onShare: (t) => setShare([t.id]), onAddTable: addTable }),
         mode === "floor" && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(FloorView, { guests, draft, onTable: (t) => setTSel(t.id), onGuest: (g) => setGSel(g.key) }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "legend", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "slegend", children: [
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "lg d-confirmed", children: "Confirmed" }),
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "lg d-invited", children: "Host invited \xB7 not accepted" }),
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "lg d-emailed", children: "SALUTE emailed \xB7 not confirmed" }),
