@@ -169,3 +169,17 @@ html,body{background:#fbfbfa!important;color:#090909!important}
 @media print{.psheet,.ptable{font-family:NeueSwiss,Arial,sans-serif}.psheet h1,.psheet h2{font-family:Aperitif,Georgia,serif;font-weight:400}.pbrand{color:#090909;letter-spacing:.3em}.ptable th{border-bottom:1px solid #090909}.rt-seat circle{stroke:#090909!important}}
 .email-cell{word-break:break-all;min-width:180px}
 .email-cell .elabel{display:block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#888}
+
+/* Higher-contrast, redundant status indicators — Nov 12 Board review. */
+:root{--c-confirmed:#146b3a;--b-confirmed:#d9f0e1;--c-invited:#164db3;--b-invited:#deEaff;--c-emailed:#865000;--b-emailed:#ffe3a1;--c-noemail:#b51f32;--b-noemail:#ffe0e4;--c-name:#50545c;--b-name:#e6e7eb;}
+.kpi.d-confirmed{border-left:6px solid var(--c-confirmed);background:var(--b-confirmed)}
+.kpi.d-invited{border-left:6px solid var(--c-invited);background:var(--b-invited)}
+.kpi.d-emailed{border-left:6px solid var(--c-emailed);background:var(--b-emailed)}
+.kpi.d-noemail{border-left:6px solid var(--c-noemail);background:var(--b-noemail)}
+.kpi.d-name{border-left:6px solid var(--c-name);background:var(--b-name)}
+.pill{font-size:11px;letter-spacing:.02em;border:1px solid currentColor;font-weight:700;padding:4px 9px;}
+.dot{width:12px;height:12px;border:1px solid rgba(0,0,0,.25)}
+.lg:before{width:12px;height:12px;border:1px solid rgba(0,0,0,.2)}
+.hold-list li,.seatlist li{border-left-width:5px}
+.d-confirmed>.dot{border-radius:50%}.d-invited>.dot{border-radius:0}.d-emailed>.dot{border-radius:2px;transform:rotate(45deg);margin-right:2px}.d-noemail>.dot{border-radius:0;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.gtable tr.d-confirmed td:first-child{border-left-width:6px}.gtable tr.d-invited td:first-child{border-left-width:6px}.gtable tr.d-emailed td:first-child{border-left-width:6px}.gtable tr.d-noemail td:first-child{border-left-width:6px}
