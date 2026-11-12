@@ -192,3 +192,9 @@ html,body{background:#fbfbfa!important;color:#090909!important}
 .rt-status{font-weight:700;fill:#343434}.rt-seat.d-confirmed .rt-status{fill:#146b3a}.rt-seat.d-invited .rt-status{fill:#164db3}.rt-seat.d-emailed .rt-status{fill:#865000}.rt-seat.d-noemail .rt-status{fill:#b51f32}
 /* Keep overview navigation neutral; statuses are emphasized on guest rows. */
 .kpi.d-confirmed,.kpi.d-invited,.kpi.d-emailed,.kpi.d-noemail,.kpi.d-name{border-left:1px solid var(--line);background:#fff}
+
+/* People roles are distinct from invitation status and table sponsorship. */
+.role-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}.role-tags:empty{display:none}.role-tag{display:inline-block;font-size:10px!important;line-height:1.4;padding:3px 7px;border:1px solid;font-weight:700;letter-spacing:.025em;text-transform:uppercase;white-space:normal}
+.role-honoree{color:#755006;background:#fff0b5;border-color:#b2831e}.role-board{color:#57317d;background:#ebdef8;border-color:#8b61b0}.role-slc{color:#095a61;background:#d5f0ed;border-color:#3c8f93}
+.pair-link{display:block!important;font-size:11px!important;font-weight:700!important;color:#903a62!important;background:#fbe8f0;padding:3px 6px;margin:3px 0;border-left:3px solid #a64d78;white-space:normal}
+.rt-role{font-weight:700}.rt-role.role-honoree{fill:#755006}.rt-role.role-board{fill:#57317d}.rt-role.role-slc{fill:#095a61}
