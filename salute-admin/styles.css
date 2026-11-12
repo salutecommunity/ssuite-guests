@@ -185,3 +185,10 @@ html,body{background:#fbfbfa!important;color:#090909!important}
 .gtable tr.d-confirmed td:first-child{border-left-width:6px}.gtable tr.d-invited td:first-child{border-left-width:6px}.gtable tr.d-emailed td:first-child{border-left-width:6px}.gtable tr.d-noemail td:first-child{border-left-width:6px}
 
 .guest-link{display:block!important;color:#17477e!important;font-size:12px!important;font-weight:700!important;white-space:normal}.group-link{display:block!important;color:#5a3a6c!important;font-size:11px!important;font-weight:600!important;white-space:normal}
+
+/* Status is readable per guest, never color-only. */
+.seat-status{display:table;margin:4px 0 2px;padding:3px 6px;border:1px solid currentColor;font-size:11px;font-weight:700;line-height:1.35;white-space:normal;letter-spacing:0;text-transform:none;}
+.seat-status.d-confirmed{color:#146b3a;background:#d9f0e1}.seat-status.d-invited{color:#164db3;background:#deeaff}.seat-status.d-emailed{color:#865000;background:#ffe3a1}.seat-status.d-noemail{color:#b51f32;background:#ffe0e4}.seat-status.d-name{color:#50545c;background:#e6e7eb}
+.rt-status{font-weight:700;fill:#343434}.rt-seat.d-confirmed .rt-status{fill:#146b3a}.rt-seat.d-invited .rt-status{fill:#164db3}.rt-seat.d-emailed .rt-status{fill:#865000}.rt-seat.d-noemail .rt-status{fill:#b51f32}
+/* Keep overview navigation neutral; statuses are emphasized on guest rows. */
+.kpi.d-confirmed,.kpi.d-invited,.kpi.d-emailed,.kpi.d-noemail,.kpi.d-name{border-left:1px solid var(--line);background:#fff}
