@@ -218,3 +218,4 @@ html,body{background:#fbfbfa!important;color:#090909!important}
 .tcard footer{flex-wrap:wrap}.tcard footer>span{flex:0 0 100%;padding:7px 12px;border-bottom:1px solid #ddd}
 .role-honoree{color:#23445f;background:#dceaf6;border-color:#7096b6}
 @media(max-width:700px){.tbd-list .hold-list{columns:1}.placeholder-divider{font-size:20px}.placeholder-controls button{width:100%}}
+.major-dietary-flag{display:block!important;background:#fff1dd;color:#7c200c!important;border:2px solid #b23c19;padding:10px!important;margin:8px 0!important;font-size:12px!important;line-height:1.5!important;white-space:normal!important}.major-dietary-flag>b{display:block;letter-spacing:.04em;margin-bottom:5px}.major-dietary-flag>span{display:block;font-weight:600}
