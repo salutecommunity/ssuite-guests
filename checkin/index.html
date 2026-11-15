@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="S.SUITE Check-in">
+<meta name="theme-color" content="#0b0b0b">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; connect-src https://iddzcbknnddkonrcwgpt.supabase.co; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>S.SUITE · Guest Check-in</title>
+<link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+<div id="gate" class="gate" hidden>
+  <form id="gateForm" autocomplete="off">
+    <img src="/assets/ssuite-logo-header.png" alt="S.SUITE" class="gate-logo">
+    <h1>Guest Check-in</h1>
+    <p class="gate-sub">Enter your personal check-in code.</p>
+    <input id="code" type="text" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="e.g. C1-ORCHID-1234" aria-label="Check-in code">
+    <button type="submit">Sign in</button>
+    <p id="gateErr" class="err" role="alert"></p>
+  </form>
+</div>
+
+<div id="app" class="app" hidden>
+  <header class="top">
+    <img src="/assets/ssuite-logo-header.png" alt="S.SUITE" class="logo">
+    <div class="count"><b id="arrived">0</b><span> of <span id="expected">0</span> arrived</span></div>
+    <div class="top-actions">
+      <span id="sync" class="sync">Connecting…</span>
+      <button id="btnTables" class="ghost">Tables</button>
+      <button id="btnWalkup" class="ghost">Walk-up</button>
+      <button id="btnMenu" class="ghost" aria-label="More">•••</button>
+    </div>
+  </header>
+  <div id="menu" class="menu" hidden>
+    <div class="menu-who">Signed in as <b id="who"></b></div>
+    <button id="btnPrint">Print door list</button>
+    <button id="btnRefresh">Refresh seating now</button>
+    <button id="btnSignout">Sign out</button>
+  </div>
+  <div class="searchbar">
+    <input id="q" type="search" placeholder="Search name, company, or table #" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Search guests">
+    <button id="btnScan" class="scan">Scan pass</button>
+  </div>
+  <nav class="chips" id="chips">
+    <button data-f="all" class="on">All</button>
+    <button data-f="todo">Not arrived</button>
+    <button data-f="done">Arrived</button>
+    <button data-f="hon">Honorees</button>
+    <button data-f="notable">No table</button>
+    <button data-f="walk">Walk-ups</button>
+  </nav>
+  <main id="list" class="list" aria-live="polite"></main>
+  <p class="foot" id="foot"></p>
+</div>
+
+<div id="sheet" class="overlay" hidden>
+  <div class="sheet" role="dialog" aria-modal="true">
+    <button class="close" data-close aria-label="Close">×</button>
+    <div id="sheetBody"></div>
+  </div>
+</div>
+
+<div id="scanner" class="overlay dark" hidden>
+  <div class="scanbox">
+    <video id="video" playsinline muted></video>
+    <div class="frame"></div>
+    <p id="scanMsg" class="scanmsg">Point the camera at the guest’s pass QR code</p>
+    <button id="scanClose" class="scanclose">Done</button>
+  </div>
+  <canvas id="canvas" hidden></canvas>
+</div>
+
+<div id="tablesView" class="overlay" hidden>
+  <div class="sheet wide" role="dialog" aria-modal="true">
+    <button class="close" data-close aria-label="Close">×</button>
+    <h2>Tables</h2>
+    <p class="muted">Arrived / seated at each table. Tap a table to see its guests.</p>
+    <div id="tablesGrid" class="tgrid"></div>
+  </div>
+</div>
+
+<div id="walkView" class="overlay" hidden>
+  <div class="sheet" role="dialog" aria-modal="true">
+    <button class="close" data-close aria-label="Close">×</button>
+    <h2>Log a walk-up</h2>
+    <p class="muted">For someone not on the list. This records them at the door and alerts the host desk; it does not assign a seat.</p>
+    <label class="fld">Name<input id="walkName" type="text" autocomplete="off"></label>
+    <label class="fld">Note (who they’re with, who approved)<textarea id="walkNote" rows="3"></textarea></label>
+    <button id="walkSave" class="primary">Log walk-up</button>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+<section id="printArea" class="print-area" aria-hidden="true"></section>
+<script src="jsqr.js?v=1"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>
