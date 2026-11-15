@@ -132,6 +132,7 @@ function bind(){
   $('tablesGrid').onclick=function(e){var b=e.target.closest('[data-t]');if(!b)return;$('tablesView').hidden=true;S.q=b.dataset.t;$('q').value=S.q;S.filter='all';[].forEach.call($('chips').children,function(x){x.classList.toggle('on',x.dataset.f==='all');});render();};
   $('btnWalkup').onclick=function(){$('walkName').value=S.q&&!/^\d+$/.test(S.q)?S.q:'';$('walkNote').value='';$('walkView').hidden=false;$('walkName').focus();};
   $('walkSave').onclick=function(){var n=$('walkName').value.trim();if(!n){$('walkName').focus();return;}act('walkup','',n,$('walkNote').value.trim());$('walkView').hidden=true;toast('Walk-up logged — send them to the host desk',3000);};
+  $('mTables').onclick=function(){$('menu').hidden=true;$('btnTables').click();};$('mWalkup').onclick=function(){$('menu').hidden=true;$('btnWalkup').click();};
   $('btnMenu').onclick=function(){$('menu').hidden=!$('menu').hidden;};
   $('btnPrint').onclick=printList;
   $('btnRefresh').onclick=function(){$('menu').hidden=true;loadRoster().then(function(){toast('Seating refreshed');}).catch(function(){toast('Offline — using saved list');});};
