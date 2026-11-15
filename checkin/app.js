@@ -116,9 +116,11 @@ function tick(ts){
 }
 // ---------- print ----------
 function printList(){
-  var gs=S.guests.slice().sort(function(a,b){return lastName(a.name).localeCompare(lastName(b.name))||a.name.localeCompare(b.name);});
+  var named=S.guests.filter(function(g){return !g.placeholder;}).sort(function(a,b){return lastName(a.name).localeCompare(lastName(b.name))||a.name.localeCompare(b.name);});
+  var pend=S.guests.filter(function(g){return g.placeholder;}).sort(function(a,b){return a.name.localeCompare(b.name);});
+  var gs=named.concat(pend);
   var cur='',h='<h1>S.SUITE · Door list</h1><p class="meta">Alphabetical by last name · '+gs.length+' guests · seating as of '+esc(new Date(S.asOf||Date.now()).toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}))+' ET · ✓ = checked in when printed</p><div class="cols">';
-  gs.forEach(function(g){var L=fold(lastName(g.name)).charAt(0).toUpperCase();if(L!==cur){cur=L;h+='<div class="letter">'+esc(L)+'</div>';}h+='<div class="pr"><span class="box">'+(isIn(g.key)?'✓':'')+'</span><span class="n">'+esc(g.name)+(g.honor?' (Honoree)':'')+'</span><span class="t">'+(g.table!=null?'Table '+g.table:'Host desk')+'</span></div>';});
+  gs.forEach(function(g){var L=g.placeholder?'Guest names pending':fold(lastName(g.name)).charAt(0).toUpperCase();if(L!==cur){cur=L;h+='<div class="letter">'+esc(L)+'</div>';}h+='<div class="pr"><span class="box">'+(isIn(g.key)?'✓':'')+'</span><span class="n">'+esc(g.name)+(g.honor?' (Honoree)':'')+'</span><span class="t">'+(g.table!=null?'Table '+g.table:'Host desk')+'</span></div>';});
   h+='</div>';$('printArea').innerHTML=h;$('menu').hidden=true;setTimeout(function(){window.print();},50);
 }
 // ---------- wiring ----------

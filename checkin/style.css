@@ -89,7 +89,7 @@ button{font:inherit;cursor:pointer;color:inherit}
 .print-area{display:none}
 @media(max-width:600px){.top{gap:10px;padding-left:12px;padding-right:12px}.logo{height:20px}.count b{font-size:22px}.count span span,.count>span{font-size:13px}#btnTables,#btnWalkup{display:none}.searchbar{top:51px;padding:12px 12px 6px}.list,.chips{padding-left:12px;padding-right:12px}.row .nm{font-size:18px}.searchbar input{font-size:17px}}
 @media print{
- body{background:#fff}
+ html,body{background:#fff!important}
  .app,.gate,.overlay,.toast,.menu{display:none!important}
  .print-area{display:block;font-size:10.5pt;color:#000}
  .print-area h1{font-family:Aperitif,Georgia,serif;font-weight:400;font-size:18pt;margin:0 0 2pt}
