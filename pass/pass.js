@@ -3,6 +3,7 @@
 var API='https://iddzcbknnddkonrcwgpt.supabase.co/functions/v1/ssuite-checkin';
 var card=document.getElementById('card'),note=document.getElementById('note');
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+var isApple=/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
 var t=(new URLSearchParams(location.search).get('t')||'').trim();
 var CK='ssuite_pass_'+t;
 function qr(text){var q=qrcode(0,'M');q.addData(text);q.make();return q.createDataURL(8,2);}
@@ -16,6 +17,7 @@ function draw(p,stale){
    '<div class="det"><div><span class="lbl">Venue</span>'+esc(ev.venue||'')+'</div><div><span class="lbl">Dress</span>'+esc(ev.dress||'')+'</div><div><span class="lbl">Address</span>'+esc(ev.address||'')+'</div></div>'+
    '<div class="qr"><img alt="Check-in code" src="'+qr(link)+'"><span>Show this code at check-in</span></div>'+
    '<div class="ft">'+esc(ev.subtitle||'')+' · Presented by SALUTE</div>';
+  var w=document.getElementById('wallet');w.href=API+'/wallet/pass?t='+encodeURIComponent(t);w.parentNode.hidden=!(isApple||!!p.walletAll);
   document.title=(p.first||'Your')+'’s S.SUITE Pass';
   note.textContent=stale?'You’re offline — showing your saved pass. Your table is confirmed at check-in.':'Your table number updates here automatically if anything changes. Tip: add this page to your Home Screen to keep it handy.';
 }
