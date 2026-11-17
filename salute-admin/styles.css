@@ -259,3 +259,17 @@ html,body{background:#fbfbfa!important;color:#090909!important}
 .fp-legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-top:10px;font-size:12px}
 .fp-legend .fp-chair{position:static;transform:none;width:12px;height:10px;vertical-align:middle;margin-right:4px}
 @media (max-width:900px){.fp-layout{grid-template-columns:1fr}.fp-side{position:static;max-height:none}}
+/* Guest lists overlay the exact floor locations; cards are not furniture footprints. */
+.fp-room.show-names .fp-chair,.fp-room.show-names .fp-top{opacity:.12}
+.fp-namecard{position:absolute;left:0;top:0;box-sizing:border-box;background:#fff;border:1px solid #999c9f;box-shadow:0 1px 3px #0002;color:#151719;line-height:1.12;z-index:2}
+.fp-slot:hover .fp-namecard{z-index:5;border-color:#090909}
+.fp-slot.over .fp-namecard{outline:3px solid #bd963f;background:#fff7df}
+.fp-nhead{display:flex;align-items:center;justify-content:space-between;line-height:1.1;border-bottom:1px solid #deded9;padding-bottom:2px;cursor:grab}
+.fp-nhost{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#5e6268;line-height:1.1}
+.fp-namecard ol{list-style:none;padding:0;margin:0}
+.fp-namecard li{padding:0;margin:0}
+.fp-guestname{width:100%;display:flex;gap:.35em;align-items:baseline;text-align:left;font:inherit;line-height:1.12;letter-spacing:normal;text-transform:none;color:#151719;background:transparent;border:0;padding:0;cursor:grab;white-space:normal;overflow-wrap:anywhere;border-radius:0}
+.fp-guestname:hover{background:#f4eddc}
+.fp-nseat{color:#8b8e94;flex:0 0 1.2em;font-size:.85em;text-align:right}
+.fp-nempty{display:flex;gap:.35em;color:#b1b2b4;line-height:1.12}
+.fp-slot.st-over .fp-namecard{border-color:#b4443b}
