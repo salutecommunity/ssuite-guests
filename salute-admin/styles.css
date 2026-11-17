@@ -273,3 +273,13 @@ html,body{background:#fbfbfa!important;color:#090909!important}
 .fp-nseat{color:#8b8e94;flex:0 0 1.2em;font-size:.85em;text-align:right}
 .fp-nempty{display:flex;gap:.35em;color:#b1b2b4;line-height:1.12}
 .fp-slot.st-over .fp-namecard{border-color:#b4443b}
+
+/* Physical seat labels: the two long sides, with saved seat numbers. */
+.fp-room.seat-names .fp-txt span,.fp-room.seat-names .fp-txt em{display:none}
+.fp-seat-label{position:absolute;box-sizing:border-box;margin:0;padding:.15em .1em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;line-height:1.08;letter-spacing:normal;text-transform:none;text-align:center;background:#fff;color:#151719;border:1px solid #a7aaad;border-radius:2px;white-space:normal;overflow-wrap:anywhere;font-family:Arial,sans-serif;cursor:grab;z-index:3}
+.fp-seat-label b{font-size:.85em;color:#65686d;line-height:1}
+.fp-seat-label.occupied{border-top:2px solid var(--c-confirmed)}
+.fp-seat-label.vacant{color:#999;background:#fafafa;border-style:dashed}
+.fp-seat-label.unavailable{opacity:.4}
+.fp-seat-label:hover,.fp-seat-label.seat-over{background:#fff1c4;outline:2px solid #a07a2c;z-index:6}
+.fp-seat-warning{position:absolute;transform:translateX(-50%);white-space:nowrap;background:#fff0ec;border:1px solid #b4443b;color:#8e3027;padding:1px 3px;z-index:6;cursor:pointer;line-height:1.1}
