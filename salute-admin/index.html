@@ -30,7 +30,7 @@
         writeFileToDisk:async function(p,c){if(String(p).indexOf('/history/')>=0){pendingAudit=JSON.parse(c);return {success:true};}if(String(p).endsWith('draft-state.json')){var body=JSON.stringify({draft:JSON.parse(c),audit:pendingAudit});pendingAudit=null;await call('/save',{method:'POST',body:body});return {success:true};}throw new Error('Not allowed');},
         invokeTool:async function(){return [await call('/live')];}
       };
-      function start(){var b=document.createElement('div');b.id='sa-bar';b.innerHTML='<button type="button">Sign out</button>';b.firstChild.onclick=signOut;document.body.appendChild(b);var s=document.createElement('script');s.src='bundle.js?v=20261117-zoom2';document.body.appendChild(s);}
+      function start(){var b=document.createElement('div');b.id='sa-bar';b.innerHTML='<button type="button">Sign out</button>';b.firstChild.onclick=signOut;document.body.appendChild(b);var s=document.createElement('script');s.src='bundle.js?v=20261118-assistant-fullscreen';document.body.appendChild(s);}
       document.addEventListener('DOMContentLoaded',function(){
         if(tok())return start();
         var g=document.createElement('div');g.id='sa-gate';g.innerHTML='<form autocomplete="off"><h1>SALUTE ADMIN</h1><h2>Guests &amp; Seating</h2><input type="password" placeholder="Admin passcode" aria-label="Admin passcode" autofocus /><button type="submit">Sign in</button><p></p></form>';document.body.appendChild(g);
