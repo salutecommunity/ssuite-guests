@@ -13,17 +13,6 @@
 <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
-<div id="gate" class="gate" hidden>
-  <form id="gateForm" autocomplete="off">
-    <img src="/assets/ssuite-logo-header.png" alt="S.SUITE" class="gate-logo">
-    <h1>Guest Check-in</h1>
-    <p class="gate-sub">Enter your personal check-in code.</p>
-    <input id="code" type="text" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="e.g. C1-ORCHID-1234" aria-label="Check-in code">
-    <button type="submit">Sign in</button>
-    <p id="gateErr" class="err" role="alert"></p>
-  </form>
-</div>
-
 <div id="app" class="app" hidden>
   <header class="top">
     <img src="/assets/ssuite-logo-header.png" alt="S.SUITE" class="logo">
@@ -36,12 +25,12 @@
     </div>
   </header>
   <div id="menu" class="menu" hidden>
-    <div class="menu-who">Signed in as <b id="who"></b></div>
+    <div class="menu-who"><b id="who"></b> · no code required</div>
     <button id="mTables">Tables</button>
     <button id="mWalkup">Log a walk-up</button>
     <button id="btnPrint">Print door list</button>
     <button id="btnRefresh">Refresh seating now</button>
-    <button id="btnSignout">Sign out</button>
+    <button id="btnSignout">Reload page</button>
   </div>
   <div class="searchbar">
     <input id="q" type="search" placeholder="Search name, company, or table #" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Search guests">
@@ -89,7 +78,7 @@
   <div class="sheet" role="dialog" aria-modal="true">
     <button class="close" data-close aria-label="Close">×</button>
     <h2>Log a walk-up</h2>
-    <p class="muted">For someone not on the list. This records them at the door and alerts the host desk; it does not assign a seat.</p>
+    <p class="muted">For someone not on the list. This records them at the door; send them to the host desk for a seat.</p>
     <label class="fld">Name<input id="walkName" type="text" autocomplete="off"></label>
     <label class="fld">Note (who they’re with, who approved)<textarea id="walkNote" rows="3"></textarea></label>
     <button id="walkSave" class="primary">Log walk-up</button>
@@ -99,6 +88,6 @@
 <div id="toast" class="toast" hidden></div>
 <section id="printArea" class="print-area" aria-hidden="true"></section>
 <script src="jsqr.js?v=1"></script>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=20261120-open1"></script>
 </body>
 </html>
